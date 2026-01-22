@@ -2,7 +2,8 @@
 
 **Phase:** 2  
 **Estimated Duration:** 4-5 days  
-**Dependencies:** Phase 1 complete
+**Dependencies:** Phase 1 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Drift/SQLite Gotchas](#3-driftsqlite-gotchas)
 
 ---
 

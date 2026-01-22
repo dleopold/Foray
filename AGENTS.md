@@ -263,6 +263,54 @@ Future<void> saveObservation(Observation obs) async {
 
 ---
 
+## Critical Gotchas (Quick Reference)
+
+**Full details:** See `PATTERNS_AND_PITFALLS.md` for comprehensive patterns and examples.
+
+### Top 10 Issues That Cause Bugs
+
+| # | Gotcha | Fix |
+|---|--------|-----|
+| 1 | **`BuildContext` after `await`** — crashes if widget disposed | `if (!context.mounted) return;` after every await |
+| 2 | **`ref.read()` in build** — UI won't update | Use `ref.watch()` in build; `read` only in callbacks |
+| 3 | **Leaking controllers/streams** — memory leaks | Always `ref.onDispose(() => controller.close())` |
+| 4 | **Missing `PRAGMA foreign_keys = ON`** — orphaned data | Add to Drift `beforeOpen` callback |
+| 5 | **Forgot to bump `schemaVersion`** — migrations don't run | Increment on ANY schema change |
+| 6 | **RLS returns empty, not error** — silent "no data" | Test queries with `auth.uid()` in SQL editor |
+| 7 | **Realtime subscribed in `build()`** — duplicate handlers | Subscribe in provider/init; unsubscribe on dispose |
+| 8 | **Local-first violated** — data loss offline | Always: local save → queue → sync (never network-first) |
+| 9 | **`go()` vs `push()` confusion** — broken back button | `go` replaces stack; `push` adds to it |
+| 10 | **Full-res images in lists** — OOM crashes | Use `cacheWidth`/`cacheHeight` on Image widgets |
+
+### Essential Code Patterns
+
+**Async UI Safety:**
+```dart
+onPressed: () async {
+  await doSomething();
+  if (!context.mounted) return;  // ALWAYS check
+  Navigator.of(context).push(...);
+}
+```
+
+**Provider Resource Cleanup:**
+```dart
+final myProvider = StreamProvider.autoDispose((ref) {
+  final controller = StreamController<Data>();
+  ref.onDispose(() => controller.close());  // ALWAYS clean up
+  return controller.stream;
+});
+```
+
+**Drift FK Enforcement:**
+```dart
+beforeOpen: (details) async {
+  await customStatement('PRAGMA foreign_keys = ON');
+}
+```
+
+---
+
 ## Critical Constraints
 
 ### DO NOT:
@@ -301,14 +349,51 @@ This is **critical** to understand:
 
 ---
 
-## Documentation Reference
+## Documentation Hierarchy
 
-| Document | Purpose |
-|----------|---------|
-| `OVERVIEW.md` | Full project vision and requirements |
-| `WORK_PLAN.md` | Phased development plan with steps |
-| `PROGRESS.md` | Current development progress tracking |
-| `specs/*.md` | Detailed specifications per feature |
+### Document Purposes
+
+| Document | When to Use | Contains |
+|----------|-------------|----------|
+| `OVERVIEW.md` | Understand project vision | Requirements, architecture decisions, data model |
+| `WORK_PLAN.md` | Execute development tasks | Step-by-step phases with spec references |
+| `PROGRESS.md` | Track completion | Checkboxes for all 74 development steps |
+| `specs/README.md` | **Find the right spec** | Index, quick lookup, dependency order |
+| `specs/01-10*.md` | Implement features | Code snippets, models, implementation details |
+
+### How to Navigate
+
+**"I need to implement a feature"**
+```
+WORK_PLAN.md → Find the step → Read referenced spec section → Implement → Update PROGRESS.md
+```
+
+**"I need to understand how X works"**
+```
+specs/README.md → Quick Lookup table → Find spec + section → Read implementation details
+```
+
+**"I need to find where X is defined"**
+```
+specs/README.md → Cross-References table → Find related specs
+```
+
+### Spec Quick Reference
+
+| Spec | Covers |
+|------|--------|
+| `01-foundation` | Theme, widgets, navigation, constants |
+| `02-database` | Drift tables, DAOs, mock data |
+| `03-auth` | Supabase auth, anonymous mode, login/register |
+| `04-forays` | Create/join forays, states, sharing |
+| `05-observations` | Camera, GPS, observation form, species search |
+| `06-collaboration` | Specimen lookup, ID voting, comments |
+| `07-navigation` | Compass, bearing, distance, arrival |
+| `08-maps` | flutter_map, markers, clustering |
+| `09-sync` | Supabase schema, RLS, push/pull sync |
+| `10-web-demo` | Web build, demo data, portfolio |
+
+**For detailed topic → spec mapping, see `specs/README.md`**
 
 ---
 
@@ -316,11 +401,13 @@ This is **critical** to understand:
 
 ### Adding a New Feature
 
-1. Check `WORK_PLAN.md` for the relevant phase
-2. Read the corresponding spec in `specs/`
-3. Follow existing patterns in similar features
-4. Update `PROGRESS.md` as you complete steps
-5. Write tests for critical functionality
+1. Find the step in `WORK_PLAN.md`
+2. Note the **Spec:** reference (e.g., `specs/05-observations.md Section 3`)
+3. Read that spec section for implementation details
+4. Check `specs/README.md` Cross-References for related specs
+5. Follow existing patterns in similar features
+6. Update `PROGRESS.md` as you complete steps
+7. Write tests for critical functionality
 
 ### Adding a New Table
 

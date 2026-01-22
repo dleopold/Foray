@@ -73,17 +73,17 @@ Flutter's web target enables a live, interactive demo embedded in a portfolio si
 **Primary:** Drift (formerly Moor)  
 **Rationale:** Type-safe SQLite wrapper with excellent migration support, reactive queries, and complex relational query capability needed for sync and offline operation.
 
-### 2.5 Backend Services (AWS) — Production Architecture
+### 2.5 Backend Services (Supabase)
 | Service | Purpose |
 |---------|---------|
-| Amazon Cognito | User authentication and authorization |
-| API Gateway | REST API endpoint |
-| Lambda | Serverless API handlers |
-| DynamoDB or Aurora PostgreSQL | Primary data store |
-| S3 | Photo storage |
-| CloudFront | CDN for photos and web demo hosting |
+| Supabase Auth | User authentication (email, Google, Apple) |
+| Supabase PostgreSQL | Primary relational data store |
+| Supabase Storage | Photo storage (S3-compatible) |
+| Supabase Realtime | Live updates for collaborative forays |
 
-**Note:** For the demo version, the backend can be mocked entirely, with all data persisted locally. The architecture supports seamless transition to a real backend.
+**Rationale:** Supabase provides a unified backend with PostgreSQL (ideal for relational data model), built-in auth, storage, and real-time subscriptions. Simpler than managing multiple AWS services, with a generous free tier suitable for portfolio/early usage.
+
+**Note:** For the demo version, the backend can be mocked entirely, with all data persisted locally. The architecture supports seamless transition to production.
 
 ### 2.6 Key Flutter Packages
 | Feature | Package | Purpose |

@@ -2,7 +2,8 @@
 
 **Phase:** 7  
 **Estimated Duration:** 4-5 days  
-**Dependencies:** Phase 5 complete
+**Dependencies:** Phase 5 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Performance Patterns](#9-performance-patterns) (sensor throttling), [Flutter/Dart Gotchas](#1-flutterdart-gotchas)
 
 ---
 

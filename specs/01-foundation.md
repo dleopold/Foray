@@ -2,7 +2,8 @@
 
 **Phase:** 1  
 **Estimated Duration:** 5-7 days  
-**Dependencies:** None
+**Dependencies:** None  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Flutter/Dart Gotchas](#1-flutterdart-gotchas), [Riverpod Pitfalls](#2-riverpod-2x-pitfalls), [GoRouter Pitfalls](#6-gorouter-pitfalls)
 
 ---
 

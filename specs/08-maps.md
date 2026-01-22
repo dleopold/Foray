@@ -2,7 +2,8 @@
 
 **Phase:** 8  
 **Estimated Duration:** 4-5 days  
-**Dependencies:** Phase 5 complete
+**Dependencies:** Phase 5 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [flutter_map Gotchas](#7-flutter_map-gotchas), [Performance Patterns](#9-performance-patterns)
 
 ---
 

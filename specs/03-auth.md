@@ -2,7 +2,8 @@
 
 **Phase:** 3  
 **Estimated Duration:** 4-5 days  
-**Dependencies:** Phase 2 complete
+**Dependencies:** Phase 2 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Supabase Integration](#4-supabase-integration), [GoRouter Pitfalls](#6-gorouter-pitfalls)
 
 ---
 

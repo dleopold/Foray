@@ -20,7 +20,7 @@ This document tracks development progress for the Foray mobile application. Each
 - [x] Create Flutter project
 - [x] Configure pubspec.yaml
 - [x] Set up linting rules
-- [ ] Initialize Git repository
+- [x] Initialize Git repository
 - [x] Create basic entry points
 
 ### Step 1.2: Theme System

@@ -2,7 +2,8 @@
 
 **Phase:** 6  
 **Estimated Duration:** 5-6 days  
-**Dependencies:** Phase 5 complete
+**Dependencies:** Phase 5 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Supabase Integration](#4-supabase-integration) (Realtime), [Riverpod Pitfalls](#2-riverpod-2x-pitfalls)
 
 ---
 

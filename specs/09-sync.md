@@ -2,7 +2,8 @@
 
 **Phase:** 9  
 **Estimated Duration:** 5-6 days  
-**Dependencies:** Phase 6 complete
+**Dependencies:** Phase 6 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Offline-First & Sync](#5-offline-first--sync-patterns), [Supabase Integration](#4-supabase-integration) (RLS)
 
 ---
 
@@ -161,7 +162,14 @@ CREATE POLICY "Read observations based on privacy" ON observations FOR SELECT US
     SELECT 1 FROM foray_participants WHERE foray_id = observations.foray_id AND user_id = auth.uid()
   ))
 );
-CREATE POLICY "Collector can modify own observations" ON observations FOR ALL USING (collector_id = auth.uid());
+-- Collectors can INSERT and UPDATE their own observations
+CREATE POLICY "Collector can create observations" ON observations FOR INSERT WITH CHECK (collector_id = auth.uid());
+CREATE POLICY "Collector can update own observations" ON observations FOR UPDATE USING (collector_id = auth.uid());
+
+-- Only foray organizer can DELETE observations
+CREATE POLICY "Organizer can delete observations" ON observations FOR DELETE USING (
+  EXISTS (SELECT 1 FROM forays WHERE id = foray_id AND creator_id = auth.uid())
+);
 
 -- Photos: same as parent observation
 CREATE POLICY "Read photos with observation" ON photos FOR SELECT USING (

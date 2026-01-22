@@ -2,7 +2,8 @@
 
 **Phase:** 5  
 **Estimated Duration:** 6-7 days  
-**Dependencies:** Phase 4 complete
+**Dependencies:** Phase 4 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Flutter/Dart Gotchas](#1-flutterdart-gotchas), [Performance Patterns](#9-performance-patterns), [Cross-Platform](#8-cross-platform-considerations)
 
 ---
 

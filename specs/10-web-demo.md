@@ -2,7 +2,8 @@
 
 **Phase:** 11  
 **Estimated Duration:** 3-4 days  
-**Dependencies:** Phase 10 complete
+**Dependencies:** Phase 10 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Cross-Platform Considerations](#8-cross-platform-considerations)
 
 ---
 

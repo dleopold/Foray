@@ -2,7 +2,8 @@
 
 **Phase:** 4  
 **Estimated Duration:** 5-6 days  
-**Dependencies:** Phase 3 complete
+**Dependencies:** Phase 3 complete  
+**Patterns & Pitfalls:** See `PATTERNS_AND_PITFALLS.md` — [Riverpod Pitfalls](#2-riverpod-2x-pitfalls), [GoRouter Pitfalls](#6-gorouter-pitfalls)
 
 ---
 
