@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/privacy_levels.dart';
+import '../../../database/tables/forays_table.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 
@@ -40,7 +40,7 @@ class PrivacyBadge extends StatelessWidget {
           if (showLabel) ...[
             const SizedBox(width: AppSpacing.xs),
             Text(
-              level.label,
+              _getLabel(),
               style: TextStyle(
                 fontSize: _getFontSize(),
                 fontWeight: FontWeight.w500,
@@ -51,6 +51,19 @@ class PrivacyBadge extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getLabel() {
+    switch (level) {
+      case PrivacyLevel.private:
+        return 'Private';
+      case PrivacyLevel.foray:
+        return 'Foray';
+      case PrivacyLevel.publicExact:
+        return 'Public';
+      case PrivacyLevel.publicObscured:
+        return 'Obscured';
+    }
   }
 
   IconData _getIcon() {

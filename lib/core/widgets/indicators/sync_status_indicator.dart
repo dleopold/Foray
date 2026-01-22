@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../database/tables/forays_table.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
-
-enum SyncStatus { local, pending, synced, failed }
 
 class SyncStatusIndicator extends StatelessWidget {
   const SyncStatusIndicator({
