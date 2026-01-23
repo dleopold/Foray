@@ -2,7 +2,7 @@
 
 **Project:** Foray - Mycological Field Collection App  
 **Started:** 2026-01-21  
-**Last Updated:** 2026-01-22
+**Last Updated:** 2026-01-22 (Phases 7 & 8 Complete)
 
 ---
 
@@ -215,7 +215,7 @@ This document tracks development progress for the Foray mobile application. Each
 ### Step 4.5: Foray Detail Screen
 - [x] ForayDetailScreen with tabs
 - [x] Feed tab (placeholder for Phase 5)
-- [x] Map tab placeholder (for Phase 8)
+- [x] Map tab (implemented in Phase 8)
 - [x] Participants tab
 - [x] Settings tab
 - [x] Status and stats display
@@ -301,8 +301,8 @@ This document tracks development progress for the Foray mobile application. Each
 - [x] DetailScreen UI
 - [x] Photo gallery
 - [x] Metadata display
-- [ ] Mini-map (deferred to Phase 8)
-- [x] Navigate button
+- [ ] Mini-map (deferred - full map available via Map tab)
+- [x] Navigate button (links to Phase 7 compass navigation)
 - [x] IDs section placeholder
 - [x] Comments section placeholder
 
@@ -375,115 +375,115 @@ This document tracks development progress for the Foray mobile application. Each
 ---
 
 ## Phase 7: Compass Navigation
-**Status:** Not Started  
+**Status:** Complete  
 **Target Duration:** 4-5 days
 
 ### Step 7.1: Compass Service
-- [ ] flutter_compass integration
-- [ ] Heading stream with smoothing
-- [ ] Calibration prompts
-- [ ] Device support check
+- [x] flutter_compass integration
+- [x] Heading stream with smoothing
+- [x] Calibration prompts
+- [x] Device support check
 
 ### Step 7.2: GPS Utilities
-- [ ] Haversine distance
-- [ ] Bearing calculation
-- [ ] GpsUtils class
-- [ ] Unit support
+- [x] Haversine distance
+- [x] Bearing calculation
+- [x] GpsUtils class
+- [x] Unit support
 - [ ] Unit tests
 
 ### Step 7.3: Compass Rose Component
-- [ ] CompassRose widget
-- [ ] Smooth rotation
-- [ ] Cardinal directions
-- [ ] Customizable styling
-- [ ] High contrast
+- [x] CompassRose widget
+- [x] Smooth rotation
+- [x] Cardinal directions
+- [x] Customizable styling
+- [x] High contrast
 
 ### Step 7.4: Bearing Indicator
-- [ ] BearingIndicator widget
-- [ ] Direction arrow
-- [ ] Compass integration
-- [ ] Smooth animation
-- [ ] Alignment highlight
+- [x] BearingIndicator widget
+- [x] Direction arrow
+- [x] Compass integration
+- [x] Smooth animation
+- [x] Alignment highlight
 
 ### Step 7.5: Distance Display
-- [ ] DistanceDisplay widget
-- [ ] Countdown animation
-- [ ] Unit preference
-- [ ] Format switching
-- [ ] Pulse animation
+- [x] DistanceDisplay widget
+- [x] Countdown animation
+- [x] Unit preference
+- [x] Format switching
+- [x] Pulse animation
 
 ### Step 7.6: Navigation Screen
-- [ ] CompassNavigationScreen UI
-- [ ] Component integration
-- [ ] Target info display
-- [ ] GPS accuracy
-- [ ] Open in Maps button
-- [ ] Permission handling
+- [x] CompassNavigationScreen UI
+- [x] Component integration
+- [x] Target info display
+- [x] GPS accuracy
+- [x] Open in Maps button
+- [x] Permission handling
 
 ### Step 7.7: Arrival Detection
-- [ ] Threshold detection
-- [ ] ArrivalCelebration widget
-- [ ] Haptic feedback
-- [ ] Mode transition
-- [ ] Dismissal handling
+- [x] Threshold detection
+- [x] ArrivalCelebration widget
+- [x] Haptic feedback
+- [x] Mode transition
+- [x] Dismissal handling
 
 ### Step 7.8: Edge Cases
-- [ ] Calibration prompt
-- [ ] Poor GPS warning
-- [ ] Very close targets
-- [ ] Very far targets
-- [ ] Permission denied
-- [ ] No compass device
+- [x] Calibration prompt
+- [x] Poor GPS warning
+- [x] Very close targets
+- [x] Very far targets
+- [x] Permission denied
+- [x] No compass device
 
 ---
 
 ## Phase 8: Maps
-**Status:** Not Started  
+**Status:** Complete  
 **Target Duration:** 4-5 days
 
 ### Step 8.1: Map Infrastructure
-- [ ] flutter_map integration
-- [ ] Tile provider config
-- [ ] ForayMapView component
-- [ ] Map controller provider
-- [ ] Lifecycle handling
+- [x] flutter_map integration
+- [x] Tile provider config
+- [x] ForayMapView component
+- [x] Map controller provider
+- [x] Lifecycle handling
 
 ### Step 8.2: Observation Markers
-- [ ] ObservationMarker widget
-- [ ] Photo thumbnails
-- [ ] Privacy indicator
-- [ ] Tap interaction
-- [ ] Tooltip/popup
+- [x] ObservationMarker widget
+- [x] Photo thumbnails
+- [x] Privacy indicator
+- [x] Tap interaction
+- [x] Tooltip/popup
 
 ### Step 8.3: Marker Clustering
-- [ ] Clustering logic
-- [ ] ClusterMarker widget
-- [ ] Count display
-- [ ] Tap to expand
-- [ ] Animation
+- [x] Clustering logic
+- [x] ClusterMarker widget
+- [x] Count display
+- [x] Tap to expand
+- [ ] Animation (deferred)
 
 ### Step 8.4: Foray Map Screen
-- [ ] ForayMapScreen (tab)
-- [ ] All observations display
-- [ ] Fit all markers
-- [ ] Date filter
-- [ ] Collector filter
-- [ ] Detail navigation
+- [x] ForayMapScreen (tab)
+- [x] All observations display
+- [x] Fit all markers
+- [ ] Date filter (deferred)
+- [ ] Collector filter (deferred)
+- [x] Detail navigation
 
 ### Step 8.5: Personal Map Screen
-- [ ] PersonalMapScreen
-- [ ] Cross-foray observations
-- [ ] Time filter
-- [ ] Species filter
-- [ ] My location button
-- [ ] Detail navigation
+- [x] PersonalMapScreen
+- [x] Cross-foray observations
+- [x] Time filter
+- [x] Species filter
+- [x] My location button
+- [x] Detail navigation
 
 ### Step 8.6: Map Polish
-- [ ] Smooth pan/zoom
-- [ ] Location indicator
-- [ ] Compass indicator
-- [ ] Theme consistency
-- [ ] Loading states
+- [x] Smooth pan/zoom
+- [x] Location indicator
+- [ ] Compass indicator (deferred)
+- [x] Theme consistency
+- [x] Loading states
 
 ---
 
@@ -641,7 +641,13 @@ This document tracks development progress for the Foray mobile application. Each
 _None currently_
 
 ### Technical Debt
-_Track items to revisit_
+- Unit tests pending for: UsersDao, ForaysDao, ObservationsDao, CollaborationDao, SyncDao, GpsUtils
+- QR code generation/scanning deferred (qr_flutter, mobile_scanner packages present but features not wired)
+- Deep linking not implemented
+- Observation detail mini-map not implemented
+- Foray map date/collector filters deferred
+- Cluster marker animation deferred
+- Map compass indicator deferred
 
 ### Decisions Made
 | Date | Decision | Rationale |
@@ -649,6 +655,9 @@ _Track items to revisit_
 | 2026-01-21 | Use Supabase for backend | Simplicity, PostgreSQL fit, good free tier |
 | 2026-01-21 | Drift for local database | Type-safe, relational model support |
 | 2026-01-21 | Simple upvote voting | Easier to implement, sufficient for use case |
+| 2026-01-22 | Circular mean for compass smoothing | Correctly handles 0/360 degree boundary |
+| 2026-01-22 | Custom clustering vs flutter_map_marker_cluster | Simpler, no additional dependency |
+| 2026-01-22 | OpenStreetMap tiles (default) | Free, no API key required for development |
 
 ### Lessons Learned
 _Document insights during development_
@@ -665,10 +674,10 @@ _Document insights during development_
 | 4. Forays | Complete | 7/7 |
 | 5. Observations | Complete | 9/9 |
 | 6. Collaboration | Complete | 7/7 |
-| 7. Navigation | Not Started | 0/8 |
-| 8. Maps | Not Started | 0/6 |
+| 7. Navigation | Complete (tests pending) | 8/8 |
+| 8. Maps | Complete | 6/6 |
 | 9. Sync | Not Started | 0/8 |
 | 10. Polish | Not Started | 0/5 |
 | 11. Web Demo | Not Started | 0/5 |
 
-**Overall Progress:** 41/74 steps (55%)
+**Overall Progress:** 55/74 steps (74%)

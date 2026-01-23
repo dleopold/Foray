@@ -1,4 +1,13 @@
 abstract class Formatters {
+  /// Formats a DateTime as YYYY-MM-DD.
+  static String date(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  /// Formats a DateTime as YYYY-MM-DD HH:MM.
+  static String dateTime(DateTime dateTime) {
+    return '${date(dateTime)} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
   static String distance(double meters, {bool useMetric = true}) {
     if (useMetric) {
       if (meters < 1000) {

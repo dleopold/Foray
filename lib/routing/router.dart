@@ -10,6 +10,8 @@ import '../features/forays/presentation/screens/create_foray_screen.dart';
 import '../features/forays/presentation/screens/foray_detail_screen.dart';
 import '../features/forays/presentation/screens/foray_list_screen.dart';
 import '../features/forays/presentation/screens/join_foray_screen.dart';
+import '../features/maps/presentation/screens/personal_map_screen.dart';
+import '../features/navigation/presentation/screens/compass_navigation_screen.dart';
 import '../features/observations/presentation/screens/observation_detail_screen.dart';
 import '../features/observations/presentation/screens/observation_entry_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
@@ -84,19 +86,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Navigation route (placeholder for Phase 7)
+      // Navigation route
       GoRoute(
         path: AppRoutes.navigate,
         builder: (context, state) {
           final observationId = state.pathParameters['observationId']!;
-          return _PlaceholderScreen(title: 'Navigate to: $observationId');
+          return CompassNavigationScreen(observationId: observationId);
         },
       ),
 
-      // Map route (placeholder for Phase 8)
+      // Map route
       GoRoute(
         path: AppRoutes.personalMap,
-        builder: (context, state) => const _PlaceholderScreen(title: 'My Map'),
+        builder: (context, state) => const PersonalMapScreen(),
       ),
 
       // Settings
