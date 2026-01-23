@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/privacy_levels.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/avatars/foray_avatar.dart';
@@ -9,6 +10,8 @@ import '../../../../routing/routes.dart';
 import '../../../auth/domain/auth_state.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../auth/presentation/widgets/upgrade_prompt.dart';
+import '../../domain/app_settings.dart';
+import '../controllers/settings_controller.dart';
 
 /// Settings screen with profile management and app preferences.
 class SettingsScreen extends ConsumerWidget {
@@ -160,15 +163,15 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         if (authState.isAuthenticated) ...[
-        ListTile(
-          leading: const Icon(Icons.sync),
-          title: const Text('Sync Status'),
-          subtitle: const Text('All data synced'),
-          trailing: const Icon(
-            Icons.cloud_done,
-            color: AppColors.success,
+          ListTile(
+            leading: const Icon(Icons.sync),
+            title: const Text('Sync Status'),
+            subtitle: const Text('All data synced'),
+            trailing: Icon(
+              Icons.cloud_done,
+              color: AppColors.success,
+            ),
           ),
-        ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sign Out'),
@@ -199,6 +202,8 @@ class SettingsScreen extends ConsumerWidget {
     WidgetRef ref,
     ThemeData theme,
   ) {
+    final settings = ref.watch(settingsControllerProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -217,35 +222,180 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         ListTile(
-          leading: const Icon(Icons.dark_mode),
-          title: const Text('Dark Mode'),
-          trailing: Switch(
-            value: theme.brightness == Brightness.dark,
-            onChanged: (value) {
-              // TODO: Implement theme toggle
-            },
-          ),
+          leading: const Icon(Icons.palette_outlined),
+          title: const Text('Theme'),
+          subtitle: Text(settings.themeMode.label),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _showThemePicker(context, ref, settings.themeMode),
         ),
         ListTile(
           leading: const Icon(Icons.straighten),
           title: const Text('Distance Units'),
-          subtitle: const Text('Metric (km, m)'),
+          subtitle: Text(
+            '${settings.distanceUnit.label} (${settings.distanceUnit.description})',
+          ),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: Show units picker
-          },
+          onTap: () => _showUnitsPicker(context, ref, settings.distanceUnit),
         ),
         ListTile(
           leading: const Icon(Icons.lock_outline),
           title: const Text('Default Privacy'),
-          subtitle: const Text('Private'),
+          subtitle: Text(settings.defaultPrivacy.label),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: Show privacy picker
-          },
+          onTap: () => _showPrivacyPicker(context, ref, settings.defaultPrivacy),
         ),
       ],
     );
+  }
+
+  void _showThemePicker(
+    BuildContext context,
+    WidgetRef ref,
+    AppThemeMode currentMode,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Text(
+                'Theme',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const Divider(height: 1),
+            ...AppThemeMode.values.map(
+              (mode) => ListTile(
+                leading: Icon(_getThemeIcon(mode)),
+                title: Text(mode.label),
+                subtitle: Text(mode.description),
+                trailing: mode == currentMode
+                    ? const Icon(Icons.check, color: AppColors.primary)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .setThemeMode(mode);
+                  Navigator.pop(sheetContext);
+                },
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconData _getThemeIcon(AppThemeMode mode) {
+    switch (mode) {
+      case AppThemeMode.system:
+        return Icons.settings_brightness;
+      case AppThemeMode.light:
+        return Icons.light_mode;
+      case AppThemeMode.dark:
+        return Icons.dark_mode;
+    }
+  }
+
+  void _showUnitsPicker(
+    BuildContext context,
+    WidgetRef ref,
+    DistanceUnit currentUnit,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Text(
+                'Distance Units',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const Divider(height: 1),
+            ...DistanceUnit.values.map(
+              (unit) => ListTile(
+                leading: const Icon(Icons.straighten),
+                title: Text(unit.label),
+                subtitle: Text(unit.description),
+                trailing: unit == currentUnit
+                    ? const Icon(Icons.check, color: AppColors.primary)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .setDistanceUnit(unit);
+                  Navigator.pop(sheetContext);
+                },
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPrivacyPicker(
+    BuildContext context,
+    WidgetRef ref,
+    PrivacyLevel currentPrivacy,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Text(
+                'Default Privacy',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const Divider(height: 1),
+            ...PrivacyLevel.values.map(
+              (privacy) => ListTile(
+                leading: Icon(_getPrivacyIcon(privacy)),
+                title: Text(privacy.label),
+                subtitle: Text(privacy.description),
+                trailing: privacy == currentPrivacy
+                    ? const Icon(Icons.check, color: AppColors.primary)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .setDefaultPrivacy(privacy);
+                  Navigator.pop(sheetContext);
+                },
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconData _getPrivacyIcon(PrivacyLevel level) {
+    switch (level) {
+      case PrivacyLevel.private:
+        return Icons.lock;
+      case PrivacyLevel.foray:
+        return Icons.group;
+      case PrivacyLevel.publicExact:
+        return Icons.public;
+      case PrivacyLevel.publicObscured:
+        return Icons.location_on;
+    }
   }
 
   Widget _buildAboutSection(BuildContext context, ThemeData theme) {

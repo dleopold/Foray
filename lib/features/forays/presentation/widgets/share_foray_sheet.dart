@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../database/database.dart';
 
 /// Bottom sheet for sharing a foray via QR code or join code.
@@ -98,9 +99,7 @@ class ShareForaySheet extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Clipboard.setData(ClipboardData(text: foray.joinCode ?? ''));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Code copied to clipboard')),
-                );
+                ForaySnackbar.showSuccess(context, 'Code copied to clipboard');
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -140,9 +139,7 @@ class ShareForaySheet extends StatelessWidget {
                   onTap: () {
                     // TODO: Add share_plus package
                     Clipboard.setData(ClipboardData(text: shareUrl));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Link copied to clipboard')),
-                    );
+                    ForaySnackbar.showSuccess(context, 'Link copied to clipboard');
                   },
                 ),
                 _ShareOption(
@@ -150,9 +147,7 @@ class ShareForaySheet extends StatelessWidget {
                   label: 'Copy Link',
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: shareUrl));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Link copied to clipboard')),
-                    );
+                    ForaySnackbar.showSuccess(context, 'Link copied to clipboard');
                   },
                 ),
                 _ShareOption(
@@ -160,9 +155,7 @@ class ShareForaySheet extends StatelessWidget {
                   label: 'Export QR',
                   onTap: () {
                     // TODO: Generate PDF with QR codes for printing
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('QR export coming soon')),
-                    );
+                    ForaySnackbar.showInfo(context, 'QR export coming soon');
                   },
                 ),
               ],

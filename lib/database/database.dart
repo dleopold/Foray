@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
+import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
+
+import '../core/config/platform_config.dart';
+import 'mock_data_seeder.dart';
 
 // Import tables
 import 'tables/users_table.dart';
@@ -82,17 +81,26 @@ class AppDatabase extends _$AppDatabase {
         // }
       },
       beforeOpen: (details) async {
-        // Enable foreign key constraints.
-        // CRITICAL: Without this, foreign key references are not enforced!
-        await customStatement('PRAGMA foreign_keys = ON');
+        // Enable foreign key constraints (not supported on web/IndexedDB)
+        if (!PlatformConfig.isWeb) {
+          await customStatement('PRAGMA foreign_keys = ON');
 
-        if (kDebugMode) {
-          // Verify foreign keys are enabled
-          final result = await customSelect('PRAGMA foreign_keys').getSingle();
-          assert(
-            result.data['foreign_keys'] == 1,
-            'Foreign keys should be enabled',
-          );
+          if (kDebugMode) {
+            final result = await customSelect('PRAGMA foreign_keys').getSingle();
+            assert(
+              result.data['foreign_keys'] == 1,
+              'Foreign keys should be enabled',
+            );
+          }
+        }
+
+        // Seed demo data on web for first launch
+        if (DemoConfig.preSeedData && details.wasCreated) {
+          final seeder = MockDataSeeder(this);
+          await seeder.seedAll();
+          if (kDebugMode) {
+            debugPrint('Demo data seeded for web');
+          }
         }
       },
     );
@@ -119,20 +127,18 @@ class AppDatabase extends _$AppDatabase {
 
 /// Opens the database connection.
 ///
-/// On mobile/desktop, creates a file-based database in the app's documents directory.
-/// The database is created in a background isolate for better performance.
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'foray.db'));
-
-    if (kDebugMode) {
-      // ignore: avoid_print
-      print('Database path: ${file.path}');
-    }
-
-    return NativeDatabase.createInBackground(file);
-  });
+/// Uses drift_flutter which automatically handles:
+/// - Native platforms (iOS, Android, macOS, Linux, Windows): SQLite file
+/// - Web: IndexedDB with sql.js
+QueryExecutor _openConnection() {
+  return driftDatabase(
+    name: 'foray',
+    // Enable web support via sql.js
+    web: DriftWebOptions(
+      sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+      driftWorker: Uri.parse('drift_worker.js'),
+    ),
+  );
 }
 
 // =============================================================================

@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/foray_button.dart';
+import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../database/database.dart';
 import '../../../../database/tables/observations_table.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
@@ -158,8 +159,9 @@ class _AddIdentificationSheetState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding ID: $e')),
+        ForaySnackbar.showError(
+          context,
+          'Could not add identification. Please try again.',
         );
       }
     } finally {

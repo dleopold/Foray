@@ -1,11 +1,11 @@
 {
-    "name": "foray",
-    "short_name": "foray",
+    "name": "Foray - Mycological Field Collection",
+    "short_name": "Foray",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F8F6F3",
+    "theme_color": "#D4843E",
+    "description": "A mobile app for documenting fungal collections in the field with GPS, photos, and collaborative identification.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

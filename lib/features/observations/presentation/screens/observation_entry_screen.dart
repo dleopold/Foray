@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/foray_button.dart';
+import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../core/widgets/indicators/gps_accuracy_indicator.dart';
 import '../../../../core/widgets/inputs/foray_text_field.dart';
 import '../../../../database/database.dart';
@@ -519,9 +520,8 @@ class _ObservationEntryScreenState
 
   Future<void> _scanSpecimenId() async {
     // TODO: Implement barcode/QR scanning for specimen ID
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Barcode scanning coming soon')),
-    );
+    if (!mounted) return;
+    ForaySnackbar.showInfo(context, 'Barcode scanning coming soon');
   }
 
   Future<void> _saveDraft() async {
@@ -531,9 +531,7 @@ class _ObservationEntryScreenState
 
   Future<void> _submit() async {
     if (_photos.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add at least one photo')),
-      );
+      ForaySnackbar.showWarning(context, 'Please add at least one photo');
       return;
     }
 
@@ -627,16 +625,17 @@ class _ObservationEntryScreenState
       // }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(isDraft ? 'Draft saved' : 'Observation saved')),
+        ForaySnackbar.showSuccess(
+          context,
+          isDraft ? 'Draft saved' : 'Observation saved',
         );
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving observation: $e')),
+        ForaySnackbar.showError(
+          context,
+          'Error saving observation. Please try again.',
         );
       }
     } finally {

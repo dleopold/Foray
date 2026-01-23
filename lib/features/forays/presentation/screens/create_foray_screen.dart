@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/foray_button.dart';
+import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../core/widgets/inputs/foray_text_field.dart';
 import '../../../../core/constants/privacy_levels.dart' as constants;
 import '../../../../database/database.dart';
@@ -209,8 +210,9 @@ class _CreateForayScreenState extends ConsumerState<CreateForayScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error creating foray: $e')),
+        ForaySnackbar.showError(
+          context,
+          'Could not create foray. Please try again.',
         );
       }
     } finally {

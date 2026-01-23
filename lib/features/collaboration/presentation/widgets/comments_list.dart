@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/extensions/datetime_extensions.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../database/database.dart';
 import '../../../../database/daos/collaboration_dao.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
@@ -154,8 +155,9 @@ class _CommentsListState extends ConsumerState<CommentsList> {
       _commentController.clear();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error posting comment: $e')),
+        ForaySnackbar.showError(
+          context,
+          'Could not post comment. Please try again.',
         );
       }
     } finally {

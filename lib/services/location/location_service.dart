@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../core/config/platform_config.dart';
 import '../../core/constants/app_constants.dart';
 
 /// Provides the location service singleton.
@@ -24,11 +27,31 @@ final positionStreamProvider = StreamProvider<Position>((ref) {
 /// Service for location/GPS operations.
 ///
 /// Handles permission checks, position retrieval, and distance/bearing calculations.
+/// On web, provides simulated positions for demo purposes.
 class LocationService {
+  // Simulated locations for web demo (Pacific Northwest mushroom hotspots)
+  static final _simulatedPositions = [
+    _SimulatedPosition(47.6062, -122.3321, 'Seattle'),
+    _SimulatedPosition(47.6205, -122.3493, 'Queen Anne'),
+    _SimulatedPosition(47.5480, -122.0354, 'Tiger Mountain'),
+    _SimulatedPosition(47.4799, -121.7817, 'Snoqualmie'),
+    _SimulatedPosition(47.7511, -122.3244, 'Carkeek Park'),
+  ];
+
+  int _simulatedIndex = 0;
+  StreamController<Position>? _webPositionController;
+  Timer? _webPositionTimer;
+
   /// Check and request location permissions.
   ///
   /// Returns true if location services are enabled and permission is granted.
+  /// On web, always returns true (simulated).
   Future<bool> checkPermission() async {
+    // Web always has "permission" for simulated location
+    if (PlatformConfig.useSimulatedLocation) {
+      return true;
+    }
+
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       if (kDebugMode) {
@@ -61,10 +84,17 @@ class LocationService {
   /// Get the current position.
   ///
   /// Returns null if permission is denied or location unavailable.
+  /// On web, returns simulated position.
   Future<Position?> getCurrentPosition({
     LocationAccuracy accuracy = LocationAccuracy.best,
     Duration? timeout,
   }) async {
+    // Return simulated position for web
+    if (PlatformConfig.useSimulatedLocation) {
+      await Future.delayed(const Duration(milliseconds: 300)); // Simulate delay
+      return _getSimulatedPosition();
+    }
+
     final hasPermission = await checkPermission();
     if (!hasPermission) return null;
 
@@ -83,16 +113,68 @@ class LocationService {
   }
 
   /// Get a stream of position updates.
+  /// On web, returns simulated position updates.
   Stream<Position> getPositionStream({
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 5,
   }) {
+    // Return simulated position stream for web
+    if (PlatformConfig.useSimulatedLocation) {
+      _webPositionController?.close();
+      _webPositionController = StreamController<Position>.broadcast();
+      _webPositionTimer?.cancel();
+
+      // Emit position updates every 2 seconds
+      _webPositionTimer = Timer.periodic(
+        const Duration(seconds: 2),
+        (_) {
+          if (_webPositionController?.isClosed == false) {
+            _webPositionController!.add(_getSimulatedPosition());
+          }
+        },
+      );
+
+      // Emit initial position
+      Future.microtask(() {
+        if (_webPositionController?.isClosed == false) {
+          _webPositionController!.add(_getSimulatedPosition());
+        }
+      });
+
+      return _webPositionController!.stream;
+    }
+
     return Geolocator.getPositionStream(
       locationSettings: LocationSettings(
         accuracy: accuracy,
         distanceFilter: distanceFilter,
       ),
     );
+  }
+
+  /// Get next simulated position (cycles through demo locations).
+  Position _getSimulatedPosition() {
+    final simulated = _simulatedPositions[_simulatedIndex];
+    _simulatedIndex = (_simulatedIndex + 1) % _simulatedPositions.length;
+
+    return Position(
+      latitude: simulated.lat,
+      longitude: simulated.lon,
+      accuracy: 10.0,
+      altitude: 100.0,
+      altitudeAccuracy: 5.0,
+      heading: 0,
+      headingAccuracy: 0,
+      speed: 0,
+      speedAccuracy: 0,
+      timestamp: DateTime.now(),
+    );
+  }
+
+  /// Dispose of web simulation resources.
+  void dispose() {
+    _webPositionTimer?.cancel();
+    _webPositionController?.close();
   }
 
   /// Calculate distance between two points in meters.
@@ -140,4 +222,13 @@ class LocationService {
   String formatCoordinates(double latitude, double longitude, {int decimals = 5}) {
     return '${latitude.toStringAsFixed(decimals)}, ${longitude.toStringAsFixed(decimals)}';
   }
+}
+
+/// Helper class for simulated positions.
+class _SimulatedPosition {
+  const _SimulatedPosition(this.lat, this.lon, this.name);
+
+  final double lat;
+  final double lon;
+  final String name;
 }

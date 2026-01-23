@@ -17,6 +17,7 @@ import '../features/observations/presentation/screens/observation_entry_screen.d
 import '../features/settings/presentation/screens/settings_screen.dart';
 import 'auth_guard.dart';
 import 'routes.dart';
+import 'transitions.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -46,42 +47,66 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Foray routes
       GoRoute(
         path: AppRoutes.createForay,
-        builder: (context, state) => const CreateForayScreen(),
+        pageBuilder: (context, state) => AppTransitions.slideUp(
+          context: context,
+          state: state,
+          child: const CreateForayScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.joinForay,
-        builder: (context, state) => const JoinForayScreen(),
+        pageBuilder: (context, state) => AppTransitions.slideUp(
+          context: context,
+          state: state,
+          child: const JoinForayScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.forayDetail,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return ForayDetailScreen(forayId: id);
+          return AppTransitions.slideRight(
+            context: context,
+            state: state,
+            child: ForayDetailScreen(forayId: id),
+          );
         },
       ),
 
       // Observation routes
       GoRoute(
         path: AppRoutes.createObservation,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final forayId = state.pathParameters['forayId']!;
-          return ObservationEntryScreen(forayId: forayId);
+          return AppTransitions.slideUp(
+            context: context,
+            state: state,
+            child: ObservationEntryScreen(forayId: forayId),
+          );
         },
       ),
       GoRoute(
         path: AppRoutes.observationDetail,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return ObservationDetailScreen(observationId: id);
+          return AppTransitions.slideRight(
+            context: context,
+            state: state,
+            child: ObservationDetailScreen(observationId: id),
+          );
         },
       ),
       GoRoute(
         path: AppRoutes.editObservation,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return ObservationEntryScreen(
-            forayId: '', // Will be loaded from observation
-            observationId: id,
+          return AppTransitions.slideUp(
+            context: context,
+            state: state,
+            child: ObservationEntryScreen(
+              forayId: '', // Will be loaded from observation
+              observationId: id,
+            ),
           );
         },
       ),
@@ -89,22 +114,34 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Navigation route
       GoRoute(
         path: AppRoutes.navigate,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final observationId = state.pathParameters['observationId']!;
-          return CompassNavigationScreen(observationId: observationId);
+          return AppTransitions.scaleFade(
+            context: context,
+            state: state,
+            child: CompassNavigationScreen(observationId: observationId),
+          );
         },
       ),
 
       // Map route
       GoRoute(
         path: AppRoutes.personalMap,
-        builder: (context, state) => const PersonalMapScreen(),
+        pageBuilder: (context, state) => AppTransitions.fade(
+          context: context,
+          state: state,
+          child: const PersonalMapScreen(),
+        ),
       ),
 
       // Settings
       GoRoute(
         path: AppRoutes.settings,
-        builder: (context, state) => const SettingsScreen(),
+        pageBuilder: (context, state) => AppTransitions.slideUp(
+          context: context,
+          state: state,
+          child: const SettingsScreen(),
+        ),
       ),
 
       // Development routes
