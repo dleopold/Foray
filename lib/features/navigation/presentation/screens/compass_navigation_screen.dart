@@ -269,8 +269,9 @@ class _CompassNavigationScreenState
 
               // GPS accuracy indicator
               if (_currentPosition != null)
-                GPSAccuracyIndicator(
-                    accuracyMeters: _currentPosition!.accuracy),
+                GpsAccuracyIndicator(
+                  accuracyMeters: _currentPosition!.accuracy,
+                ),
 
               const Spacer(),
 

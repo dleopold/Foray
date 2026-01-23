@@ -229,17 +229,17 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
     String? preliminaryId,
     String? preliminaryIdConfidence,
   }) async {
-    final companion = ObservationsCompanion.insert(
+    final companion = ObservationsCompanion(
       id: Value(remoteId),
       remoteId: Value(remoteId),
-      forayId: forayId,
-      collectorId: collectorId,
-      latitude: latitude,
-      longitude: longitude,
+      forayId: Value(forayId),
+      collectorId: Value(collectorId),
+      latitude: Value(latitude),
+      longitude: Value(longitude),
       gpsAccuracy: Value(gpsAccuracy),
       altitude: Value(altitude),
       privacyLevel: Value(PrivacyLevel.values.firstWhere((e) => e.name == privacyLevel)),
-      observedAt: observedAt,
+      observedAt: Value(observedAt),
       specimenId: Value(specimenId),
       collectionNumber: Value(collectionNumber),
       substrate: Value(substrate),
@@ -308,11 +308,11 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
     String? caption,
   }) {
     return into(photos).insert(
-      PhotosCompanion.insert(
+      PhotosCompanion(
         id: Value(remoteId),
         remoteId: Value(remoteId),
-        observationId: observationId,
-        localPath: storagePath,
+        observationId: Value(observationId),
+        localPath: Value(storagePath),
         remoteUrl: Value(remoteUrl),
         sortOrder: Value(sortOrder),
         caption: Value(caption),

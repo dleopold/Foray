@@ -121,8 +121,9 @@ class _ForayMapTabState extends ConsumerState<ForayMapTab> {
               markers: markers,
               onTap: (_, __) => _clearSelection(),
               onPositionChanged: (camera, hasGesture) {
-                if (_currentZoom != camera.zoom) {
-                  setState(() => _currentZoom = camera.zoom);
+                final zoom = camera.zoom;
+                if (zoom != null && _currentZoom != zoom) {
+                  setState(() => _currentZoom = zoom);
                 }
               },
             ),

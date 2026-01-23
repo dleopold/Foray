@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../database/database.dart';
 import '../../../../database/daos/observations_dao.dart';
+import '../../../../database/tables/forays_table.dart';
 
 /// Builds a marker for an observation.
 class ObservationMarkerBuilder {

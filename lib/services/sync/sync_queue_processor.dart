@@ -29,7 +29,7 @@ class SyncQueueProcessor {
   final SyncService _syncService;
   
   Timer? _processingTimer;
-  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
   bool _isProcessing = false;
   bool _isRunning = false;
 
@@ -45,8 +45,8 @@ class SyncQueueProcessor {
       (_) => processQueue(),
     );
 
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((results) {
-      if (results.isNotEmpty && results.first != ConnectivityResult.none) {
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((result) {
+      if (result != ConnectivityResult.none) {
         processQueue();
       }
     });
@@ -69,7 +69,7 @@ class SyncQueueProcessor {
 
     try {
       final connectivity = await Connectivity().checkConnectivity();
-      if (connectivity.isEmpty || connectivity.first == ConnectivityResult.none) {
+      if (connectivity == ConnectivityResult.none) {
         _emitStatus(SyncProcessorState.offline);
         return;
       }

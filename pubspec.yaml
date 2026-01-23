@@ -47,6 +47,8 @@ dependencies:
   intl: ^0.18.1
   collection: ^1.18.0
   equatable: ^2.0.5
+  connectivity_plus: ^5.0.2
+  image: ^4.1.4
   
   # UI
   cached_network_image: ^3.3.0

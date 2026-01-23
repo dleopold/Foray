@@ -49,7 +49,7 @@ class ForayMap extends StatelessWidget {
   final void Function(TapPosition, LatLng)? onLongPress;
 
   /// Callback when the map position changes.
-  final void Function(MapCamera, bool)? onPositionChanged;
+  final PositionCallback? onPositionChanged;
 
   /// Whether to show the user's location.
   final bool showUserLocation;
