@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../database.dart';
 import '../tables/comments_table.dart';
+import '../tables/forays_table.dart';
 import '../tables/identifications_table.dart';
 import '../tables/users_table.dart';
 
@@ -64,12 +65,25 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  /// Get an identification by ID.
+  Future<Identification?> getIdentificationById(String id) {
+    return (select(identifications)..where((i) => i.id.equals(id)))
+        .getSingleOrNull();
+  }
+
   /// Delete an identification and its votes.
   Future<void> deleteIdentification(String id) async {
     await (delete(identificationVotes)
           ..where((v) => v.identificationId.equals(id)))
         .go();
     await (delete(identifications)..where((i) => i.id.equals(id))).go();
+  }
+
+  /// Update sync status for an identification.
+  Future<void> updateIdentificationSyncStatus(String id, SyncStatus status) {
+    return (update(identifications)..where((i) => i.id.equals(id))).write(
+      IdentificationsCompanion(syncStatus: Value(status)),
+    );
   }
 
   // =========================================================================
@@ -211,9 +225,21 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  /// Get a comment by ID.
+  Future<Comment?> getCommentById(String id) {
+    return (select(comments)..where((c) => c.id.equals(id))).getSingleOrNull();
+  }
+
   /// Delete a comment.
   Future<void> deleteComment(String id) {
     return (delete(comments)..where((c) => c.id.equals(id))).go();
+  }
+
+  /// Update sync status for a comment.
+  Future<void> updateCommentSyncStatus(String id, SyncStatus status) {
+    return (update(comments)..where((c) => c.id.equals(id))).write(
+      CommentsCompanion(syncStatus: Value(status)),
+    );
   }
 
   /// Get comment count for an observation.

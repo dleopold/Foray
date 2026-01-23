@@ -191,6 +191,12 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
+  /// Get an observation by its remote ID.
+  Future<Observation?> getObservationByRemoteId(String remoteId) {
+    return (select(observations)..where((o) => o.remoteId.equals(remoteId)))
+        .getSingleOrNull();
+  }
+
   /// Update sync status for an observation.
   Future<void> updateSyncStatus(String id, SyncStatus status,
       {String? remoteId}) {
@@ -199,6 +205,118 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
         syncStatus: Value(status),
         remoteId: remoteId != null ? Value(remoteId) : const Value.absent(),
         updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  /// Create an observation from remote data.
+  Future<Observation> createFromRemote({
+    required String remoteId,
+    required String forayId,
+    required String collectorId,
+    required double latitude,
+    required double longitude,
+    double? gpsAccuracy,
+    double? altitude,
+    required String privacyLevel,
+    required DateTime observedAt,
+    String? specimenId,
+    String? collectionNumber,
+    String? substrate,
+    String? habitatNotes,
+    String? fieldNotes,
+    String? sporePrintColor,
+    String? preliminaryId,
+    String? preliminaryIdConfidence,
+  }) async {
+    final companion = ObservationsCompanion.insert(
+      id: Value(remoteId),
+      remoteId: Value(remoteId),
+      forayId: forayId,
+      collectorId: collectorId,
+      latitude: latitude,
+      longitude: longitude,
+      gpsAccuracy: Value(gpsAccuracy),
+      altitude: Value(altitude),
+      privacyLevel: Value(PrivacyLevel.values.firstWhere((e) => e.name == privacyLevel)),
+      observedAt: observedAt,
+      specimenId: Value(specimenId),
+      collectionNumber: Value(collectionNumber),
+      substrate: Value(substrate),
+      habitatNotes: Value(habitatNotes),
+      fieldNotes: Value(fieldNotes),
+      sporePrintColor: Value(sporePrintColor),
+      preliminaryId: Value(preliminaryId),
+      preliminaryIdConfidence: Value(preliminaryIdConfidence != null 
+        ? ConfidenceLevel.values.firstWhere((e) => e.name == preliminaryIdConfidence)
+        : null),
+      isDraft: const Value(false),
+      syncStatus: const Value(SyncStatus.synced),
+    );
+    
+    await into(observations).insert(companion);
+    return (select(observations)..where((o) => o.id.equals(remoteId))).getSingle();
+  }
+
+  /// Update an observation from remote data.
+  Future<void> updateFromRemote({
+    required String localId,
+    required double latitude,
+    required double longitude,
+    double? gpsAccuracy,
+    double? altitude,
+    required String privacyLevel,
+    String? specimenId,
+    String? collectionNumber,
+    String? substrate,
+    String? habitatNotes,
+    String? fieldNotes,
+    String? sporePrintColor,
+    String? preliminaryId,
+    String? preliminaryIdConfidence,
+  }) {
+    return (update(observations)..where((o) => o.id.equals(localId))).write(
+      ObservationsCompanion(
+        latitude: Value(latitude),
+        longitude: Value(longitude),
+        gpsAccuracy: Value(gpsAccuracy),
+        altitude: Value(altitude),
+        privacyLevel: Value(PrivacyLevel.values.firstWhere((e) => e.name == privacyLevel)),
+        specimenId: Value(specimenId),
+        collectionNumber: Value(collectionNumber),
+        substrate: Value(substrate),
+        habitatNotes: Value(habitatNotes),
+        fieldNotes: Value(fieldNotes),
+        sporePrintColor: Value(sporePrintColor),
+        preliminaryId: Value(preliminaryId),
+        preliminaryIdConfidence: Value(preliminaryIdConfidence != null 
+          ? ConfidenceLevel.values.firstWhere((e) => e.name == preliminaryIdConfidence)
+          : null),
+        syncStatus: const Value(SyncStatus.synced),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  /// Create a photo record from remote data.
+  Future<void> createPhotoFromRemote({
+    required String remoteId,
+    required String observationId,
+    required String storagePath,
+    String? remoteUrl,
+    int sortOrder = 0,
+    String? caption,
+  }) {
+    return into(photos).insert(
+      PhotosCompanion.insert(
+        id: Value(remoteId),
+        remoteId: Value(remoteId),
+        observationId: observationId,
+        localPath: storagePath,
+        remoteUrl: Value(remoteUrl),
+        sortOrder: Value(sortOrder),
+        caption: Value(caption),
+        uploadStatus: const Value(UploadStatus.uploaded),
       ),
     );
   }
