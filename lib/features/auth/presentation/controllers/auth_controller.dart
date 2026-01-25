@@ -113,6 +113,9 @@ class AuthController extends StateNotifier<AppAuthState> {
 
   /// Handle Supabase auth state changes.
   void _handleAuthChange(AuthChangeEvent event, Session? session) async {
+    if (kDebugMode) {
+      debugPrint('Auth state change: $event, hasSession: ${session != null}');
+    }
     if (event == AuthChangeEvent.signedIn && session != null) {
       await _handleSignIn(session);
     } else if (event == AuthChangeEvent.signedOut) {
@@ -191,6 +194,9 @@ class AuthController extends StateNotifier<AppAuthState> {
 
   /// Handle successful sign in.
   Future<void> _handleSignIn(Session session) async {
+    if (kDebugMode) {
+      debugPrint('_handleSignIn called with user: ${session.user.email}');
+    }
     final supabaseUser = session.user;
     final localUser = state.user;
 
@@ -264,10 +270,16 @@ class AuthController extends StateNotifier<AppAuthState> {
     state = state.copyWith(status: AppAuthStatus.loading, clearError: true);
 
     try {
-      await _auth.signInWithPassword(
+      if (kDebugMode) {
+        debugPrint('Attempting sign in for: $email');
+      }
+      final response = await _auth.signInWithPassword(
         email: email,
         password: password,
       );
+      if (kDebugMode) {
+        debugPrint('Sign in response: hasSession=${response.session != null}, hasUser=${response.user != null}');
+      }
       // State will be updated by auth listener
     } on AuthException catch (e) {
       state = state.copyWith(

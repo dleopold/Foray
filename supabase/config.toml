@@ -22,8 +22,8 @@ file_size_limit = "10MiB"
 
 [auth]
 enabled = true
-site_url = "http://localhost:3000"
-additional_redirect_urls = ["io.foray.app://login-callback"]
+site_url = "http://localhost:8080"
+additional_redirect_urls = ["io.foray.app://login-callback", "http://localhost:8080"]
 jwt_expiry = 3600
 enable_signup = true
 
