@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
-import 'core/config/platform_config.dart';
 import 'core/config/supabase_config.dart';
 import 'features/settings/presentation/controllers/settings_controller.dart';
 
@@ -14,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load .env file (skip on web, fails silently if not found)
-  if (!PlatformConfig.isWeb) {
+  if (!kIsWeb) {
     try {
       await dotenv.load(fileName: '.env');
     } catch (_) {
