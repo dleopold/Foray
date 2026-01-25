@@ -281,13 +281,36 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email.trim());
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      ref.read(authControllerProvider.notifier).signUpWithEmail(
-            _emailController.text.trim(),
-            _passwordController.text,
-            _displayNameController.text.trim(),
-          );
+      final needsConfirmation =
+          await ref.read(authControllerProvider.notifier).signUpWithEmail(
+                _emailController.text.trim(),
+                _passwordController.text,
+                _displayNameController.text.trim(),
+              );
+
+      if (needsConfirmation && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Check Your Email'),
+            content: Text(
+              'We sent a confirmation link to ${_emailController.text.trim()}. '
+              'Please check your email and click the link to complete registration.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.go(AppRoutes.login);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 }

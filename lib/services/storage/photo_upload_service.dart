@@ -15,10 +15,21 @@ final photoUploadServiceProvider = Provider<PhotoUploadService>((ref) {
   return PhotoUploadService(ref.watch(supabaseClientProvider));
 });
 
+/// Exception thrown when photo operations fail due to Supabase being unavailable.
+class PhotoUploadUnavailableException implements Exception {
+  const PhotoUploadUnavailableException([this.message = 'Photo upload unavailable: Supabase not configured']);
+  final String message;
+  @override
+  String toString() => message;
+}
+
 class PhotoUploadService {
   PhotoUploadService(this._supabase);
 
-  final SupabaseClient _supabase;
+  final SupabaseClient? _supabase;
+  
+  /// Whether photo upload is available (Supabase configured).
+  bool get isAvailable => _supabase != null;
   static const _uuid = Uuid();
   static const _bucketName = 'photos';
 
@@ -27,6 +38,10 @@ class PhotoUploadService {
     required String observationId,
     void Function(double)? onProgress,
   }) async {
+    if (_supabase == null) {
+      throw const PhotoUploadUnavailableException();
+    }
+    
     final compressedBytes = await _compressIfNeeded(file);
     
     final extension = p.extension(file.path).toLowerCase();
@@ -56,10 +71,12 @@ class PhotoUploadService {
   }
 
   Future<void> deletePhoto(String storagePath) async {
+    if (_supabase == null) return; // No-op when offline
     await _supabase.storage.from(_bucketName).remove([storagePath]);
   }
 
   Future<void> deleteObservationPhotos(String observationId) async {
+    if (_supabase == null) return; // No-op when offline
     final files = await _supabase.storage
         .from(_bucketName)
         .list(path: 'observations/$observationId');

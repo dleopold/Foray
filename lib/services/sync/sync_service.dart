@@ -17,14 +17,29 @@ final syncServiceProvider = Provider<SyncService>((ref) {
   );
 });
 
+/// Exception thrown when sync operations fail due to Supabase being unavailable.
+class SyncUnavailableException implements Exception {
+  const SyncUnavailableException([this.message = 'Sync unavailable: Supabase not configured']);
+  final String message;
+  @override
+  String toString() => message;
+}
+
 class SyncService {
   SyncService(this._supabase, this._db, this._photoUploader);
 
-  final SupabaseClient _supabase;
+  final SupabaseClient? _supabase;
   final AppDatabase _db;
   final PhotoUploadService _photoUploader;
+  
+  /// Whether sync is available (Supabase configured).
+  bool get isAvailable => _supabase != null;
 
   Future<void> pushObservation(String observationId) async {
+    if (_supabase == null) {
+      throw const SyncUnavailableException();
+    }
+    
     final observation = await _db.observationsDao.getObservationById(observationId);
     if (observation == null) return;
 
@@ -87,6 +102,10 @@ class SyncService {
   }
 
   Future<void> pushForay(String forayId) async {
+    if (_supabase == null) {
+      throw const SyncUnavailableException();
+    }
+    
     final foray = await _db.foraysDao.getForayById(forayId);
     if (foray == null) return;
 
@@ -120,6 +139,10 @@ class SyncService {
   }
 
   Future<void> pushIdentification(String identificationId) async {
+    if (_supabase == null) {
+      throw const SyncUnavailableException();
+    }
+    
     final id = await _db.collaborationDao.getIdentificationById(identificationId);
     if (id == null) return;
 
@@ -143,6 +166,10 @@ class SyncService {
   }
 
   Future<void> pushComment(String commentId) async {
+    if (_supabase == null) {
+      throw const SyncUnavailableException();
+    }
+    
     final comment = await _db.collaborationDao.getCommentById(commentId);
     if (comment == null) return;
 
@@ -162,6 +189,10 @@ class SyncService {
   }
 
   Future<void> pullForayObservations(String forayId) async {
+    if (_supabase == null) {
+      throw const SyncUnavailableException();
+    }
+    
     final foray = await _db.foraysDao.getForayById(forayId);
     if (foray?.remoteId == null) return;
 

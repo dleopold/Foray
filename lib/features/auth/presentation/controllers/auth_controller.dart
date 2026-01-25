@@ -14,9 +14,8 @@ import '../../domain/auth_state.dart';
 /// Provides the authentication controller.
 final authControllerProvider =
     StateNotifierProvider<AuthController, AppAuthState>((ref) {
-  final auth = SupabaseConfig.isConfigured
-      ? ref.watch(supabaseAuthProvider)
-      : null;
+  // supabaseAuthProvider returns null when Supabase is not available (web/unconfigured)
+  final auth = ref.watch(supabaseAuthProvider);
   final db = ref.watch(databaseProvider);
   return AuthController(auth, db);
 });
@@ -40,41 +39,58 @@ class AuthController extends StateNotifier<AppAuthState> {
   Future<void> _init() async {
     state = state.copyWith(status: AppAuthStatus.loading);
 
-    // Listen to Supabase auth changes (if configured)
-    if (_auth != null) {
-      _auth.onAuthStateChange.listen((data) {
-        _handleAuthChange(data.event, data.session);
-      });
-    }
+    try {
+      // Listen to Supabase auth changes (if configured)
+      if (_auth != null) {
+        _authSubscription = _auth.onAuthStateChange.listen((data) {
+          _handleAuthChange(data.event, data.session);
+        });
+      }
 
-    // Check for existing local user
-    final localUser = await _db.usersDao.getCurrentUser();
+      // Check for existing local user
+      final localUser = await _db.usersDao.getCurrentUser();
 
-    if (localUser != null) {
-      if (localUser.isAnonymous) {
-        state = AppAuthState(
-          status: AppAuthStatus.anonymous,
-          user: localUser,
-        );
-      } else {
-        // Verify Supabase session is still valid
-        final session = _auth?.currentSession;
-        if (session != null) {
-          state = AppAuthState(
-            status: AppAuthStatus.authenticated,
-            user: localUser,
-          );
-        } else {
-          // Session expired - still allow local access but mark as anonymous
+      if (localUser != null) {
+        if (localUser.isAnonymous) {
           state = AppAuthState(
             status: AppAuthStatus.anonymous,
             user: localUser,
           );
+        } else {
+          // Verify Supabase session is still valid
+          final session = _auth?.currentSession;
+          if (session != null) {
+            state = AppAuthState(
+              status: AppAuthStatus.authenticated,
+              user: localUser,
+            );
+          } else {
+            // Session expired - still allow local access but mark as anonymous
+            state = AppAuthState(
+              status: AppAuthStatus.anonymous,
+              user: localUser,
+            );
+          }
         }
+      } else {
+        // First launch - create anonymous user
+        await _createAnonymousUser();
       }
-    } else {
-      // First launch - create anonymous user
-      await _createAnonymousUser();
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        debugPrint('Auth initialization error: $e');
+        debugPrint('Stack trace: $stackTrace');
+      }
+      // On error, create anonymous user as fallback
+      try {
+        await _createAnonymousUser();
+      } catch (e2) {
+        if (kDebugMode) {
+          debugPrint('Failed to create anonymous user: $e2');
+        }
+        // Last resort - set to anonymous without user
+        state = const AppAuthState(status: AppAuthStatus.anonymous);
+      }
     }
   }
 
@@ -267,7 +283,8 @@ class AuthController extends StateNotifier<AppAuthState> {
   }
 
   /// Sign up with email and password.
-  Future<void> signUpWithEmail(
+  /// Returns true if email confirmation is required.
+  Future<bool> signUpWithEmail(
     String email,
     String password,
     String displayName,
@@ -276,28 +293,38 @@ class AuthController extends StateNotifier<AppAuthState> {
       state = state.copyWith(
         errorMessage: 'Supabase is not configured. Running in offline mode.',
       );
-      return;
+      return false;
     }
 
     state = state.copyWith(status: AppAuthStatus.loading, clearError: true);
 
     try {
-      await _auth.signUp(
+      final response = await _auth.signUp(
         email: email,
         password: password,
         data: {'name': displayName},
       );
-      // State will be updated by auth listener
+
+      // If session is null but user exists, email confirmation is required
+      if (response.session == null && response.user != null) {
+        state = state.copyWith(status: AppAuthStatus.anonymous);
+        return true; // Email confirmation needed
+      }
+
+      // State will be updated by auth listener if session exists
+      return false;
     } on AuthException catch (e) {
       state = state.copyWith(
         status: AppAuthStatus.anonymous,
         errorMessage: e.message,
       );
+      return false;
     } catch (e) {
       state = state.copyWith(
         status: AppAuthStatus.anonymous,
         errorMessage: 'An unexpected error occurred',
       );
+      return false;
     }
   }
 

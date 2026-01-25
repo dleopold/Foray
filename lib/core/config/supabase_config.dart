@@ -1,38 +1,51 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// Configuration for Supabase backend.
 ///
-/// In production, these values should be provided via environment variables
-/// using `--dart-define` flags during build:
+/// Values are read in this priority order:
+/// 1. `--dart-define` flags (for production builds)
+/// 2. `.env` file (for local development, not available on web)
+/// 3. Default placeholder values
 ///
+/// Production build example:
 /// ```bash
 /// flutter build apk \
 ///   --dart-define=SUPABASE_URL=https://your-project.supabase.co \
 ///   --dart-define=SUPABASE_ANON_KEY=your-anon-key
 /// ```
 abstract class SupabaseConfig {
-  /// Supabase project URL.
-  ///
-  /// Get this from your Supabase project settings.
-  static const String url = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: 'https://your-project.supabase.co',
-  );
+  static const _defaultUrl = 'https://your-project.supabase.co';
+  static const _defaultKey = 'your-anon-key';
 
-  /// Supabase anonymous/public key.
-  ///
-  /// This is safe to include in client apps - RLS protects your data.
-  static const String anonKey = String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: 'your-anon-key',
-  );
+  /// Helper to safely get dotenv value (not available on web).
+  static String? _getDotenvValue(String key) {
+    if (kIsWeb) return null;
+    try {
+      return dotenv.env[key];
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Supabase project URL.
+  static String get url {
+    const dartDefine = String.fromEnvironment('SUPABASE_URL');
+    if (dartDefine.isNotEmpty) return dartDefine;
+    return _getDotenvValue('SUPABASE_URL') ?? _defaultUrl;
+  }
+
+  /// Supabase anonymous/public key (safe for client apps - RLS protects data).
+  static String get anonKey {
+    const dartDefine = String.fromEnvironment('SUPABASE_ANON_KEY');
+    if (dartDefine.isNotEmpty) return dartDefine;
+    return _getDotenvValue('SUPABASE_ANON_KEY') ?? _defaultKey;
+  }
 
   /// OAuth redirect URL for deep linking.
-  ///
-  /// Must match the URL scheme configured in:
-  /// - iOS: Info.plist
-  /// - Android: AndroidManifest.xml
   static const String oauthRedirectUrl = 'io.foray.app://login-callback';
 
-  /// Check if Supabase is properly configured.
+  /// Whether Supabase is properly configured (always false on web).
   static bool get isConfigured =>
-      url != 'https://your-project.supabase.co' && anonKey != 'your-anon-key';
+      !kIsWeb && url != _defaultUrl && anonKey != _defaultKey;
 }

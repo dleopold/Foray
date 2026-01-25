@@ -81,6 +81,11 @@ class AppDatabase extends _$AppDatabase {
         // }
       },
       beforeOpen: (details) async {
+        if (kDebugMode) {
+          debugPrint('Database beforeOpen: wasCreated=${details.wasCreated}, '
+              'hadUpgrade=${details.hadUpgrade}, isWeb=${PlatformConfig.isWeb}');
+        }
+
         // Enable foreign key constraints (not supported on web/IndexedDB)
         if (!PlatformConfig.isWeb) {
           await customStatement('PRAGMA foreign_keys = ON');
@@ -96,11 +101,18 @@ class AppDatabase extends _$AppDatabase {
 
         // Seed demo data on web for first launch
         if (DemoConfig.preSeedData && details.wasCreated) {
+          if (kDebugMode) {
+            debugPrint('Seeding demo data for web...');
+          }
           final seeder = MockDataSeeder(this);
           await seeder.seedAll();
           if (kDebugMode) {
             debugPrint('Demo data seeded for web');
           }
+        }
+
+        if (kDebugMode) {
+          debugPrint('Database initialization complete');
         }
       },
     );
@@ -129,14 +141,19 @@ class AppDatabase extends _$AppDatabase {
 ///
 /// Uses drift_flutter which automatically handles:
 /// - Native platforms (iOS, Android, macOS, Linux, Windows): SQLite file
-/// - Web: IndexedDB with sql.js
+/// - Web: WebAssembly SQLite with IndexedDB persistence
 QueryExecutor _openConnection() {
   return driftDatabase(
     name: 'foray',
-    // Enable web support via sql.js
     web: DriftWebOptions(
       sqlite3Wasm: Uri.parse('sqlite3.wasm'),
       driftWorker: Uri.parse('drift_worker.js'),
+      onResult: (result) {
+        if (kDebugMode && result.missingFeatures.isNotEmpty) {
+          debugPrint('Drift web: Using ${result.chosenImplementation} '
+              'due to missing features: ${result.missingFeatures}');
+        }
+      },
     ),
   );
 }
