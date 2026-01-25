@@ -24,14 +24,16 @@ void main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  // Skip Supabase on web (SDK has compatibility issues) - use offline demo mode
-  if (SupabaseConfig.isConfigured && !PlatformConfig.isWeb) {
+  // Initialize Supabase if configured (via dart-define or .env)
+  if (SupabaseConfig.isConfigured) {
     await Supabase.initialize(
       url: SupabaseConfig.url,
       anonKey: SupabaseConfig.anonKey,
     );
+    if (kDebugMode) {
+      debugPrint('Supabase initialized: ${SupabaseConfig.url}');
+    }
   }
-  // Note: Debug logging moved after runApp to avoid web initialization issues
 
   runApp(
     ProviderScope(

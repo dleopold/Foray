@@ -45,7 +45,9 @@ abstract class SupabaseConfig {
   /// OAuth redirect URL for deep linking.
   static const String oauthRedirectUrl = 'io.foray.app://login-callback';
 
-  /// Whether Supabase is properly configured (always false on web).
-  static bool get isConfigured =>
-      !kIsWeb && url != _defaultUrl && anonKey != _defaultKey;
+   /// Whether Supabase is properly configured.
+   /// On web, requires --dart-define flags at build time.
+   /// On native, can use .env file or --dart-define flags.
+   static bool get isConfigured =>
+       url != _defaultUrl && anonKey != _defaultKey;
 }

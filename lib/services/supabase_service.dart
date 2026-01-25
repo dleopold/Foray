@@ -1,18 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../core/config/platform_config.dart';
 import '../core/config/supabase_config.dart';
 
 /// Whether Supabase is available (configured AND initialized).
 ///
-/// On web, Supabase is intentionally disabled for demo mode.
+/// Returns true when Supabase credentials are provided via --dart-define or .env file.
 bool get isSupabaseAvailable =>
-    SupabaseConfig.isConfigured && !PlatformConfig.isWeb;
+    SupabaseConfig.isConfigured;
 
 /// Provides the Supabase client instance.
 ///
-/// Returns null if Supabase is not configured or on web platform.
+/// Returns null if Supabase is not configured.
 /// The client is initialized in main.dart before the app starts.
 final supabaseClientProvider = Provider<SupabaseClient?>((ref) {
   if (!isSupabaseAvailable) return null;
