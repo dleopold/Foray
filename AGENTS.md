@@ -23,6 +23,26 @@ This document provides context and guidelines for AI coding agents working on th
 | Navigation | GoRouter |
 | Maps | flutter_map |
 
+### Running on Web with Supabase
+
+Web builds require Supabase credentials via `--dart-define`:
+
+**Development:**
+```bash
+flutter run -d chrome --web-port=8080 \
+  --dart-define=SUPABASE_URL=https://your-project.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=your-anon-key
+```
+
+**Production build:**
+```bash
+flutter build web \
+  --dart-define=SUPABASE_URL=https://your-project.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=your-anon-key
+```
+
+**Note:** Get credentials from `.env` file or Supabase dashboard.
+
 ---
 
 ## MCP Tools for Documentation & Research
