@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document outlines the development plan for Foray, a cross-platform mobile application for mycological field collection. Development is divided into 9 phases with discrete, self-contained steps that build upon each other.
+This document outlines the development plan for Foray, a cross-platform mobile application for mycological field collection. Development is divided into 10 phases with discrete, self-contained steps that build upon each other.
 
 ### Architecture Summary
 
@@ -923,69 +923,6 @@ See `OVERVIEW.md` for full context. Key decisions made during planning:
 
 ---
 
-## Phase 11: Web Demo
-
-**Goal:** Build and deploy Flutter web version for portfolio demonstration.  
-**Duration:** 3-4 days  
-**Dependencies:** Phase 10 complete
-
-### Step 11.1: Web Build Configuration
-**Spec:** `specs/10-web-demo.md` Section 1
-
-- [ ] Configure Flutter web build
-- [ ] Optimize for size (tree-shaking, deferred loading)
-- [ ] Configure web-specific settings
-- [ ] Test build locally
-- [ ] Fix any web-specific compilation issues
-
-**Deliverables:** Flutter web building successfully
-
-### Step 11.2: Feature Adaptation
-**Spec:** `specs/10-web-demo.md` Section 2
-
-- [ ] Replace camera with file picker
-- [ ] Use simulated/fixed GPS coordinates
-- [ ] Simulate compass (animated demo)
-- [ ] Ensure Drift works with IndexedDB on web
-- [ ] Handle any missing platform APIs
-
-**Deliverables:** All features work or degrade gracefully on web
-
-### Step 11.3: Demo Data
-**Spec:** `specs/10-web-demo.md` Section 3
-
-- [ ] Create rich demo dataset
-- [ ] Include sample forays (society, group, solo)
-- [ ] Include diverse observations
-- [ ] Include sample photos (bundled assets)
-- [ ] Pre-seed authenticated demo user
-
-**Deliverables:** Compelling demo content
-
-### Step 11.4: Portfolio Integration
-**Spec:** `specs/10-web-demo.md` Section 4
-
-- [ ] Deploy to static hosting (Vercel/Netlify)
-- [ ] Create phone frame mockup (CSS)
-- [ ] Embed Flutter web in iframe
-- [ ] Add landing page with app description
-- [ ] Add links to GitHub repo (if public)
-
-**Deliverables:** Live portfolio demo
-
-### Step 11.5: Demo Polish
-**Spec:** `specs/10-web-demo.md` Section 5
-
-- [ ] Test full demo flow
-- [ ] Optimize loading experience
-- [ ] Add loading splash screen
-- [ ] Test on multiple browsers
-- [ ] Test responsive behavior
-
-**Deliverables:** Polished web demo experience
-
----
-
 ## Dependencies Graph
 
 ```
@@ -1007,15 +944,12 @@ Phase 5 (Observations) ───────┬───────────
 Phase 6 (Collaboration)   Phase 7 (Navigation)  Phase 8 (Maps)
     │                         │               │
     └─────────────────────────┼───────────────┘
-                              │
-                              ▼
-                      Phase 9 (Sync)
-                              │
-                              ▼
-                      Phase 10 (Polish)
-                              │
-                              ▼
-                      Phase 11 (Web Demo)
+                               │
+                               ▼
+                       Phase 9 (Sync)
+                               │
+                               ▼
+                       Phase 10 (Polish)
 ```
 
 ---
@@ -1034,9 +968,8 @@ Phase 6 (Collaboration)   Phase 7 (Navigation)  Phase 8 (Maps)
 | Phase 8: Maps | 4-5 days | Week 8-9 |
 | Phase 9: Sync | 5-6 days | Week 9-10 |
 | Phase 10: Polish | 3-4 days | Week 10-11 |
-| Phase 11: Web Demo | 3-4 days | Week 11-12 |
 
-**Total:** ~10-12 weeks
+**Total:** ~9-11 weeks
 
 ---
 

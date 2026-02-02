@@ -26,7 +26,6 @@ Foray is a cross-platform mobile application for documenting fungal collections 
 - **Showcase Quality:** This app serves as a portfolio demonstration piece. UI/UX must be polished, modern, and delightful—not merely functional.
 - **Privacy-First:** Collection locations are sensitive data. All location sharing is opt-in, with granular controls. Users trust Foray with their secret spots.
 - **Offline-First:** Full functionality without network connectivity is a core requirement. Forays happen in forests without cell service.
-- **Web Demo Capability:** The app must deploy to web for portfolio demonstration, allowing prospective clients to experience the UI directly in-browser.
 
 ### 1.4 Target Users
 - Mycological society members and foray organizers
@@ -44,36 +43,23 @@ The "foray" becomes the universal organizing unit in the app—a container for o
 ## 2. Technical Stack
 
 ### 2.1 Mobile Framework: Flutter
-**Rationale:** Flutter provides superior control over UI/UX polish, consistent cross-platform rendering, excellent offline database options, and—critically—first-party web compilation for portfolio demos.
+**Rationale:** Flutter provides superior control over UI/UX polish, consistent cross-platform rendering, and excellent offline database options.
 
 **Language:** Dart
 
 **Target Platforms:**
 - iOS (primary)
 - Android (primary)
-- Web (demo/portfolio deployment)
 
-### 2.2 Web Demo Deployment
-Flutter's web target enables a live, interactive demo embedded in a portfolio site:
-- Compile with `flutter build web`
-- Deploy to static hosting (Vercel, Netlify, GitHub Pages, or S3/CloudFront)
-- Embed in a phone-frame mockup via CSS/iframe
-- Mobile-specific features (camera, GPS) gracefully degrade to mock data or placeholder flows
-
-**Demo Considerations:**
-- Initial bundle size ~2-3MB (acceptable for portfolio context)
-- Use mock/seeded data to demonstrate full UI flows
-- Compass navigation can use simulated location data on web
-
-### 2.3 State Management
+### 2.2 State Management
 **Primary:** Riverpod 2.x  
 **Rationale:** Type-safe, testable, supports code generation, handles async state elegantly.
 
-### 2.4 Local Database
+### 2.3 Local Database
 **Primary:** Drift (formerly Moor)  
 **Rationale:** Type-safe SQLite wrapper with excellent migration support, reactive queries, and complex relational query capability needed for sync and offline operation.
 
-### 2.5 Backend Services (Supabase)
+### 2.4 Backend Services (Supabase)
 | Service | Purpose |
 |---------|---------|
 | Supabase Auth | User authentication (email, Google, Apple) |
@@ -81,11 +67,9 @@ Flutter's web target enables a live, interactive demo embedded in a portfolio si
 | Supabase Storage | Photo storage (S3-compatible) |
 | Supabase Realtime | Live updates for collaborative forays |
 
-**Rationale:** Supabase provides a unified backend with PostgreSQL (ideal for relational data model), built-in auth, storage, and real-time subscriptions. Simpler than managing multiple AWS services, with a generous free tier suitable for portfolio/early usage.
+**Rationale:** Supabase provides a unified backend with PostgreSQL (ideal for relational data model), built-in auth, storage, and real-time subscriptions. Simpler than managing multiple AWS services, with a generous free tier suitable for early usage.
 
-**Note:** For the demo version, the backend can be mocked entirely, with all data persisted locally. The architecture supports seamless transition to production.
-
-### 2.6 Key Flutter Packages
+### 2.5 Key Flutter Packages
 | Feature | Package | Purpose |
 |---------|---------|---------|
 | GPS Location | `geolocator` | Current position, distance calculations |
@@ -671,20 +655,12 @@ lib/
 - [ ] Animation polish
 - [ ] Empty states and loading skeletons
 
-### Phase 6: Web Demo & Launch (Weeks 11-12)
-- [ ] Flutter web build optimization
-- [ ] Mock data for web demo
-- [ ] Graceful degradation for camera/GPS on web
-- [ ] Portfolio landing page with embedded demo
-- [ ] Phone frame mockup styling
-- [ ] Documentation and README
-
 ---
 
 ## 9. Quality Requirements
 
 ### 9.1 Performance Targets
-- Cold start: < 2 seconds (mobile), < 4 seconds (web, first load)
+- Cold start: < 2 seconds (mobile)
 - Observation save (local): < 100ms perceived
 - Compass update: 60fps smooth rotation
 - List scroll: 60fps consistent
@@ -723,48 +699,10 @@ lib/
 
 ---
 
-## 11. Demo Considerations
-
-### 11.1 Web Demo Scope
-The portfolio web demo should showcase:
-- Full navigation and screen flows
-- Component library and design system
-- Compass navigation with simulated location
-- Map views with pre-seeded observations
-- Privacy controls and indicators
-- Offline-first architecture (show sync status UI)
-
-### 11.2 Mock Data for Demo
-Pre-seed with realistic data:
-- 2-3 sample forays (one society event, one small group, one solo)
-- 30-50 observations with varied species, photos, locations
-- Multiple users with avatars
-- Mix of privacy levels demonstrated
-- Some observations marked for sync, others synced
-
-### 11.3 Simulated Features on Web
-| Feature | Mobile | Web Demo |
-|---------|--------|----------|
-| Camera | Real camera | File picker or sample images |
-| GPS | Real location | Simulated coordinates |
-| Compass | Real magnetometer | Simulated heading (animated) |
-| Offline | SQLite | IndexedDB via Drift web |
-| Push notifications | Real | N/A |
-
-### 11.4 Portfolio Integration
-- Landing page explaining Foray concept
-- Device frame (iPhone 15 Pro mockup) containing iframe with Flutter web app
-- Call-to-action buttons (even if placeholder) for app stores
-- Link to GitHub repo (if open-sourcing)
-- Technical write-up of architecture decisions
-
----
-
-## 12. References & Resources
+## 11. References & Resources
 
 ### Documentation
 - [Flutter Documentation](https://docs.flutter.dev/)
-- [Flutter Web Support](https://docs.flutter.dev/platform-integration/web)
 - [Riverpod Documentation](https://riverpod.dev/)
 - [Drift Documentation](https://drift.simonbinder.eu/)
 - [flutter_compass Package](https://pub.dev/packages/flutter_compass)
@@ -786,7 +724,7 @@ Pre-seed with realistic data:
 
 ---
 
-## Appendix A: Glossary
+## Appendix: Glossary
 
 | Term | Definition |
 |------|------------|
@@ -802,7 +740,7 @@ Pre-seed with realistic data:
 
 ---
 
-## Appendix B: Substrate Picker Options
+## Appendix: Substrate Picker Options
 
 Standard substrate options for the observation entry form:
 
@@ -835,7 +773,7 @@ Standard substrate options for the observation entry form:
 
 ---
 
-## Appendix C: Spore Print Color Options
+## Appendix: Spore Print Color Options
 
 Standard spore print colors for quick selection:
 

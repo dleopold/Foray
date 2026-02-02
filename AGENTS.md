@@ -6,7 +6,7 @@ This document provides context and guidelines for AI coding agents working on th
 
 ## Project Overview
 
-**Foray** is a cross-platform mobile application for documenting fungal collections in the field. Built with Flutter/Dart, it supports iOS, Android, and Web (for demo purposes).
+**Foray** is a cross-platform mobile application for documenting fungal collections in the field. Built with Flutter/Dart, it supports iOS and Android.
 
 ### Key Characteristics
 - **Offline-first**: All features must work without network connectivity
@@ -22,26 +22,6 @@ This document provides context and guidelines for AI coding agents working on th
 | Cloud Backend | Supabase (PostgreSQL, Auth, Storage, Realtime) |
 | Navigation | GoRouter |
 | Maps | flutter_map |
-
-### Running on Web with Supabase
-
-Web builds require Supabase credentials via `--dart-define`:
-
-**Development:**
-```bash
-flutter run -d chrome --web-port=8080 \
-  --dart-define=SUPABASE_URL=https://your-project.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=your-anon-key
-```
-
-**Production build:**
-```bash
-flutter build web \
-  --dart-define=SUPABASE_URL=https://your-project.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=your-anon-key
-```
-
-**Note:** Get credentials from `.env` file or Supabase dashboard.
 
 ---
 
@@ -411,7 +391,6 @@ specs/README.md → Cross-References table → Find related specs
 | `07-navigation` | Compass, bearing, distance, arrival |
 | `08-maps` | flutter_map, markers, clustering |
 | `09-sync` | Supabase schema, RLS, push/pull sync |
-| `10-web-demo` | Web build, demo data, portfolio |
 
 **For detailed topic → spec mapping, see `specs/README.md`**
 

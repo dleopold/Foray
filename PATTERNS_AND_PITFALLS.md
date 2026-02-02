@@ -348,7 +348,7 @@ redirect: (context, state) {
 
 | Gotcha | Why It Matters | Correct Approach |
 |--------|----------------|------------------|
-| Losing deep-link destination after login | Bad UX; breaks web demo | Preserve `from` param, redirect after auth |
+| Losing deep-link destination after login | Bad UX; breaks external link flow | Preserve `from` param, redirect after auth |
 | Misusing `go()` vs `push()` | Unexpected back button behavior | `go` replaces stack; `push` adds to it |
 | Passing non-serializable `extra` | Web refresh/deep link breaks | Keep `extra` optional; encode critical state in path/query |
 
@@ -405,7 +405,7 @@ class _ForayMapScreenState extends ConsumerState<ForayMapScreen> {
 
 ## 8. Cross-Platform Considerations
 
-**Referenced by:** `specs/05-observations.md`, `specs/10-web-demo.md`
+**Referenced by:** `specs/05-observations.md`
 
 ### Platform Differences
 

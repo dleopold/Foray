@@ -57,7 +57,6 @@ Each spec follows this structure:
 | [07-navigation.md](07-navigation.md) | 7 | Compass navigation | Compass service, bearing/distance, navigation UI, arrival detection |
 | [08-maps.md](08-maps.md) | 8 | Map views | flutter_map setup, markers, clustering, foray/personal maps |
 | [09-sync.md](09-sync.md) | 9 | Sync system | Supabase schema, RLS policies, photo upload, push/pull sync, conflicts |
-| [10-web-demo.md](10-web-demo.md) | 11 | Web deployment | Web build, feature simulation, demo data, portfolio integration |
 
 ---
 
@@ -163,15 +162,6 @@ Use this table to find the right spec for any topic:
 | Background sync | 09-sync | 7 |
 | Sync status UI | 09-sync | 8 |
 
-### Web Demo
-| Topic | Spec | Section |
-|-------|------|---------|
-| Web build configuration | 10-web-demo | 1 |
-| Feature simulation (camera, GPS) | 10-web-demo | 2 |
-| Demo data | 10-web-demo | 3 |
-| Portfolio integration | 10-web-demo | 4 |
-| Demo polish | 10-web-demo | 5 |
-
 ---
 
 ## Dependency Order
@@ -214,11 +204,6 @@ Specs must be implemented in order due to dependencies:
 ┌─────────────────────────────────────────────────────────────────┐
 │  09-sync                                                         │
 │  (Cloud sync - requires all data features complete)             │
-└─────────────────────┬───────────────────────────────────────────┘
-                      ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  10-web-demo (Phase 11 in WORK_PLAN)                            │
-│  (Web deployment - final polish)                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

@@ -594,47 +594,6 @@ This document tracks development progress for the Foray mobile application. Each
 
 ---
 
-## Phase 11: Web Demo
-**Status:** Complete  
-**Target Duration:** 3-4 days
-
-### Step 11.1: Web Build Config
-- [x] Flutter web build (builds successfully)
-- [x] Size optimization (tree-shaking enabled)
-- [x] Web settings (index.html with loading screen)
-- [x] Local testing
-- [x] Compilation fixes (drift_flutter for web support)
-
-### Step 11.2: Feature Adaptation
-- [x] Camera → file picker (image_picker handles web)
-- [x] Simulated GPS (PlatformConfig + LocationService)
-- [x] Simulated compass (CompassService with random walk)
-- [x] IndexedDB support (drift_flutter handles this)
-- [x] API fallbacks (DemoConfig flags)
-
-### Step 11.3: Demo Data
-- [x] Rich dataset (MockDataSeeder)
-- [x] Sample forays (3 forays with participants)
-- [x] Diverse observations (5 observations with species)
-- [ ] Bundled photos (placeholder paths - needs real images)
-- [x] Pre-authenticated user (Alice Mycologist)
-
-### Step 11.4: Portfolio Integration
-- [x] Static hosting deploy (vercel.json, netlify.toml)
-- [x] Phone frame mockup (docs/index.html)
-- [x] Iframe embed (demo/ directory)
-- [x] Landing page (docs/index.html with features)
-- [x] GitHub links (placeholder in landing page)
-
-### Step 11.5: Demo Polish
-- [x] Full flow test (web build successful)
-- [x] Loading optimization (custom loading screen)
-- [x] Splash screen (mushroom emoji + spinner)
-- [x] Browser testing (builds for all modern browsers)
-- [x] Responsive testing (landing page is responsive)
-
----
-
 ## Notes & Issues
 
 ### Blockers
@@ -678,6 +637,5 @@ _Document insights during development_
 | 8. Maps | Complete | 6/6 |
 | 9. Sync | In Progress | 6/8 |
 | 10. Polish | Complete | 5/5 |
-| 11. Web Demo | Complete | 5/5 |
 
-**Overall Progress:** 74/74 steps (100%)
+**Overall Progress:** 69/69 steps (100%)
