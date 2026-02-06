@@ -587,6 +587,8 @@ class $ForaysTable extends Forays with TableInfo<$ForaysTable, Foray> {
   late final GeneratedColumn<String> locationName = GeneratedColumn<String>(
       'location_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _defaultPrivacyMeta =
+      const VerificationMeta('defaultPrivacy');
   @override
   late final GeneratedColumnWithTypeConverter<PrivacyLevel, String>
       defaultPrivacy = GeneratedColumn<String>(
@@ -604,6 +606,7 @@ class $ForaysTable extends Forays with TableInfo<$ForaysTable, Foray> {
           GeneratedColumn.checkTextLength(minTextLength: 6, maxTextLength: 6),
       type: DriftSqlType.string,
       requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumnWithTypeConverter<ForayStatus, String> status =
       GeneratedColumn<String>('status', aliasedName, false,
@@ -646,6 +649,8 @@ class $ForaysTable extends Forays with TableInfo<$ForaysTable, Foray> {
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
+  static const VerificationMeta _syncStatusMeta =
+      const VerificationMeta('syncStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
       GeneratedColumn<String>('sync_status', aliasedName, false,
@@ -720,10 +725,12 @@ class $ForaysTable extends Forays with TableInfo<$ForaysTable, Foray> {
           locationName.isAcceptableOrUnknown(
               data['location_name']!, _locationNameMeta));
     }
+    context.handle(_defaultPrivacyMeta, const VerificationResult.success());
     if (data.containsKey('join_code')) {
       context.handle(_joinCodeMeta,
           joinCode.isAcceptableOrUnknown(data['join_code']!, _joinCodeMeta));
     }
+    context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('is_solo')) {
       context.handle(_isSoloMeta,
           isSolo.isAcceptableOrUnknown(data['is_solo']!, _isSoloMeta));
@@ -742,6 +749,7 @@ class $ForaysTable extends Forays with TableInfo<$ForaysTable, Foray> {
       context.handle(_updatedAtMeta,
           updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     }
+    context.handle(_syncStatusMeta, const VerificationResult.success());
     return context;
   }
 
@@ -1326,6 +1334,7 @@ class $ForayParticipantsTable extends ForayParticipants
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES users (id)'));
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
   @override
   late final GeneratedColumnWithTypeConverter<ParticipantRole, String> role =
       GeneratedColumn<String>('role', aliasedName, false,
@@ -1366,6 +1375,7 @@ class $ForayParticipantsTable extends ForayParticipants
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
+    context.handle(_roleMeta, const VerificationResult.success());
     if (data.containsKey('joined_at')) {
       context.handle(_joinedAtMeta,
           joinedAt.isAcceptableOrUnknown(data['joined_at']!, _joinedAtMeta));
@@ -1650,6 +1660,8 @@ class $ObservationsTable extends Observations
   late final GeneratedColumn<double> altitude = GeneratedColumn<double>(
       'altitude', aliasedName, true,
       type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _privacyLevelMeta =
+      const VerificationMeta('privacyLevel');
   @override
   late final GeneratedColumnWithTypeConverter<PrivacyLevel, String>
       privacyLevel = GeneratedColumn<String>(
@@ -1723,6 +1735,8 @@ class $ObservationsTable extends Observations
   late final GeneratedColumn<String> preliminaryId = GeneratedColumn<String>(
       'preliminary_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _preliminaryIdConfidenceMeta =
+      const VerificationMeta('preliminaryIdConfidence');
   @override
   late final GeneratedColumnWithTypeConverter<ConfidenceLevel?, String>
       preliminaryIdConfidence = GeneratedColumn<String>(
@@ -1740,6 +1754,8 @@ class $ObservationsTable extends Observations
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_draft" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _syncStatusMeta =
+      const VerificationMeta('syncStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
       GeneratedColumn<String>('sync_status', aliasedName, false,
@@ -1834,6 +1850,7 @@ class $ObservationsTable extends Observations
       context.handle(_altitudeMeta,
           altitude.isAcceptableOrUnknown(data['altitude']!, _altitudeMeta));
     }
+    context.handle(_privacyLevelMeta, const VerificationResult.success());
     if (data.containsKey('observed_at')) {
       context.handle(
           _observedAtMeta,
@@ -1890,10 +1907,13 @@ class $ObservationsTable extends Observations
           preliminaryId.isAcceptableOrUnknown(
               data['preliminary_id']!, _preliminaryIdMeta));
     }
+    context.handle(
+        _preliminaryIdConfidenceMeta, const VerificationResult.success());
     if (data.containsKey('is_draft')) {
       context.handle(_isDraftMeta,
           isDraft.isAcceptableOrUnknown(data['is_draft']!, _isDraftMeta));
     }
+    context.handle(_syncStatusMeta, const VerificationResult.success());
     if (data.containsKey('last_viewed_at')) {
       context.handle(
           _lastViewedAtMeta,
@@ -2793,6 +2813,8 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
   late final GeneratedColumn<String> caption = GeneratedColumn<String>(
       'caption', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _uploadStatusMeta =
+      const VerificationMeta('uploadStatus');
   @override
   late final GeneratedColumnWithTypeConverter<UploadStatus, String>
       uploadStatus = GeneratedColumn<String>(
@@ -2866,6 +2888,7 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
       context.handle(_captionMeta,
           caption.isAcceptableOrUnknown(data['caption']!, _captionMeta));
     }
+    context.handle(_uploadStatusMeta, const VerificationResult.success());
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -3285,6 +3308,8 @@ class $IdentificationsTable extends Identifications
   late final GeneratedColumn<String> commonName = GeneratedColumn<String>(
       'common_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _confidenceMeta =
+      const VerificationMeta('confidence');
   @override
   late final GeneratedColumnWithTypeConverter<ConfidenceLevel, String>
       confidence = GeneratedColumn<String>('confidence', aliasedName, false,
@@ -3314,6 +3339,8 @@ class $IdentificationsTable extends Identifications
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
+  static const VerificationMeta _syncStatusMeta =
+      const VerificationMeta('syncStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
       GeneratedColumn<String>('sync_status', aliasedName, false,
@@ -3385,6 +3412,7 @@ class $IdentificationsTable extends Identifications
           commonName.isAcceptableOrUnknown(
               data['common_name']!, _commonNameMeta));
     }
+    context.handle(_confidenceMeta, const VerificationResult.success());
     if (data.containsKey('notes')) {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
@@ -3397,6 +3425,7 @@ class $IdentificationsTable extends Identifications
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
+    context.handle(_syncStatusMeta, const VerificationResult.success());
     return context;
   }
 
@@ -4137,6 +4166,8 @@ class $CommentsTable extends Comments with TableInfo<$CommentsTable, Comment> {
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
+  static const VerificationMeta _syncStatusMeta =
+      const VerificationMeta('syncStatus');
   @override
   late final GeneratedColumnWithTypeConverter<SyncStatus, String> syncStatus =
       GeneratedColumn<String>('sync_status', aliasedName, false,
@@ -4190,6 +4221,7 @@ class $CommentsTable extends Comments with TableInfo<$CommentsTable, Comment> {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
+    context.handle(_syncStatusMeta, const VerificationResult.success());
     return context;
   }
 
@@ -4525,6 +4557,8 @@ class $SyncQueueTable extends SyncQueue
   late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
       'entity_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _operationMeta =
+      const VerificationMeta('operation');
   @override
   late final GeneratedColumnWithTypeConverter<SyncOperation, String> operation =
       GeneratedColumn<String>('operation', aliasedName, false,
@@ -4536,6 +4570,7 @@ class $SyncQueueTable extends SyncQueue
   late final GeneratedColumn<String> payload = GeneratedColumn<String>(
       'payload', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumnWithTypeConverter<SyncQueueStatus, String> status =
       GeneratedColumn<String>('status', aliasedName, false,
@@ -4611,10 +4646,12 @@ class $SyncQueueTable extends SyncQueue
     } else if (isInserting) {
       context.missing(_entityIdMeta);
     }
+    context.handle(_operationMeta, const VerificationResult.success());
     if (data.containsKey('payload')) {
       context.handle(_payloadMeta,
           payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta));
     }
+    context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('retry_count')) {
       context.handle(
           _retryCountMeta,
@@ -5101,7 +5138,7 @@ final class $$UsersTableReferences
 
   $$ForaysTableProcessedTableManager get foraysRefs {
     final manager = $$ForaysTableTableManager($_db, $_db.forays)
-        .filter((f) => f.creatorId.id.sqlEquals($_itemColumn<String>('id')!));
+        .filter((f) => f.creatorId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_foraysRefsTable($_db));
     return ProcessedTableManager(
@@ -5117,7 +5154,7 @@ final class $$UsersTableReferences
   $$ForayParticipantsTableProcessedTableManager get forayParticipantsRefs {
     final manager =
         $$ForayParticipantsTableTableManager($_db, $_db.forayParticipants)
-            .filter((f) => f.userId.id.sqlEquals($_itemColumn<String>('id')!));
+            .filter((f) => f.userId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_forayParticipantsRefsTable($_db));
@@ -5133,7 +5170,7 @@ final class $$UsersTableReferences
 
   $$ObservationsTableProcessedTableManager get observationsRefs {
     final manager = $$ObservationsTableTableManager($_db, $_db.observations)
-        .filter((f) => f.collectorId.id.sqlEquals($_itemColumn<String>('id')!));
+        .filter((f) => f.collectorId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_observationsRefsTable($_db));
     return ProcessedTableManager(
@@ -5148,8 +5185,8 @@ final class $$UsersTableReferences
 
   $$IdentificationsTableProcessedTableManager get identificationsRefs {
     final manager =
-        $$IdentificationsTableTableManager($_db, $_db.identifications).filter(
-            (f) => f.identifierId.id.sqlEquals($_itemColumn<String>('id')!));
+        $$IdentificationsTableTableManager($_db, $_db.identifications)
+            .filter((f) => f.identifierId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_identificationsRefsTable($_db));
@@ -5167,7 +5204,7 @@ final class $$UsersTableReferences
   $$IdentificationVotesTableProcessedTableManager get identificationVotesRefs {
     final manager =
         $$IdentificationVotesTableTableManager($_db, $_db.identificationVotes)
-            .filter((f) => f.userId.id.sqlEquals($_itemColumn<String>('id')!));
+            .filter((f) => f.userId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_identificationVotesRefsTable($_db));
@@ -5182,7 +5219,7 @@ final class $$UsersTableReferences
 
   $$CommentsTableProcessedTableManager get commentsRefs {
     final manager = $$CommentsTableTableManager($_db, $_db.comments)
-        .filter((f) => f.authorId.id.sqlEquals($_itemColumn<String>('id')!));
+        .filter((f) => f.authorId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_commentsRefsTable($_db));
     return ProcessedTableManager(
@@ -5669,7 +5706,7 @@ class $$UsersTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (foraysRefs)
-                    await $_getPrefetchedData<User, $UsersTable, Foray>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
                             $$UsersTableReferences._foraysRefsTable(db),
@@ -5680,8 +5717,7 @@ class $$UsersTableTableManager extends RootTableManager<
                                 .where((e) => e.creatorId == item.id),
                         typedResults: items),
                   if (forayParticipantsRefs)
-                    await $_getPrefetchedData<User, $UsersTable,
-                            ForayParticipant>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$UsersTableReferences
                             ._forayParticipantsRefsTable(db),
@@ -5693,7 +5729,7 @@ class $$UsersTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (observationsRefs)
-                    await $_getPrefetchedData<User, $UsersTable, Observation>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
                             $$UsersTableReferences._observationsRefsTable(db),
@@ -5705,8 +5741,7 @@ class $$UsersTableTableManager extends RootTableManager<
                                 .where((e) => e.collectorId == item.id),
                         typedResults: items),
                   if (identificationsRefs)
-                    await $_getPrefetchedData<User, $UsersTable,
-                            Identification>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$UsersTableReferences
                             ._identificationsRefsTable(db),
@@ -5718,8 +5753,7 @@ class $$UsersTableTableManager extends RootTableManager<
                                 .where((e) => e.identifierId == item.id),
                         typedResults: items),
                   if (identificationVotesRefs)
-                    await $_getPrefetchedData<User, $UsersTable,
-                            IdentificationVote>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$UsersTableReferences
                             ._identificationVotesRefsTable(db),
@@ -5731,7 +5765,7 @@ class $$UsersTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (commentsRefs)
-                    await $_getPrefetchedData<User, $UsersTable, Comment>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
                             $$UsersTableReferences._commentsRefsTable(db),
@@ -5811,10 +5845,8 @@ final class $$ForaysTableReferences
       .createAlias($_aliasNameGenerator(db.forays.creatorId, db.users.id));
 
   $$UsersTableProcessedTableManager get creatorId {
-    final $_column = $_itemColumn<String>('creator_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.creatorId));
     final item = $_typedResult.readTableOrNull(_creatorIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -5830,7 +5862,7 @@ final class $$ForaysTableReferences
   $$ForayParticipantsTableProcessedTableManager get forayParticipantsRefs {
     final manager =
         $$ForayParticipantsTableTableManager($_db, $_db.forayParticipants)
-            .filter((f) => f.forayId.id.sqlEquals($_itemColumn<String>('id')!));
+            .filter((f) => f.forayId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_forayParticipantsRefsTable($_db));
@@ -5846,7 +5878,7 @@ final class $$ForaysTableReferences
 
   $$ObservationsTableProcessedTableManager get observationsRefs {
     final manager = $$ObservationsTableTableManager($_db, $_db.observations)
-        .filter((f) => f.forayId.id.sqlEquals($_itemColumn<String>('id')!));
+        .filter((f) => f.forayId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_observationsRefsTable($_db));
     return ProcessedTableManager(
@@ -6305,8 +6337,7 @@ class $$ForaysTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (forayParticipantsRefs)
-                    await $_getPrefetchedData<Foray, $ForaysTable,
-                            ForayParticipant>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$ForaysTableReferences
                             ._forayParticipantsRefsTable(db),
@@ -6318,7 +6349,7 @@ class $$ForaysTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.forayId == item.id),
                         typedResults: items),
                   if (observationsRefs)
-                    await $_getPrefetchedData<Foray, $ForaysTable, Observation>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
                             $$ForaysTableReferences._observationsRefsTable(db),
@@ -6375,10 +6406,8 @@ final class $$ForayParticipantsTableReferences extends BaseReferences<
       $_aliasNameGenerator(db.forayParticipants.forayId, db.forays.id));
 
   $$ForaysTableProcessedTableManager get forayId {
-    final $_column = $_itemColumn<String>('foray_id')!;
-
     final manager = $$ForaysTableTableManager($_db, $_db.forays)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.forayId));
     final item = $_typedResult.readTableOrNull(_forayIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6389,10 +6418,8 @@ final class $$ForayParticipantsTableReferences extends BaseReferences<
       $_aliasNameGenerator(db.forayParticipants.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
-    final $_column = $_itemColumn<String>('user_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6751,10 +6778,8 @@ final class $$ObservationsTableReferences
       .createAlias($_aliasNameGenerator(db.observations.forayId, db.forays.id));
 
   $$ForaysTableProcessedTableManager get forayId {
-    final $_column = $_itemColumn<String>('foray_id')!;
-
     final manager = $$ForaysTableTableManager($_db, $_db.forays)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.forayId));
     final item = $_typedResult.readTableOrNull(_forayIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6766,10 +6791,8 @@ final class $$ObservationsTableReferences
           $_aliasNameGenerator(db.observations.collectorId, db.users.id));
 
   $$UsersTableProcessedTableManager get collectorId {
-    final $_column = $_itemColumn<String>('collector_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.collectorId));
     final item = $_typedResult.readTableOrNull(_collectorIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6783,8 +6806,8 @@ final class $$ObservationsTableReferences
               db.observations.id, db.photos.observationId));
 
   $$PhotosTableProcessedTableManager get photosRefs {
-    final manager = $$PhotosTableTableManager($_db, $_db.photos).filter(
-        (f) => f.observationId.id.sqlEquals($_itemColumn<String>('id')!));
+    final manager = $$PhotosTableTableManager($_db, $_db.photos)
+        .filter((f) => f.observationId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_photosRefsTable($_db));
     return ProcessedTableManager(
@@ -6799,8 +6822,8 @@ final class $$ObservationsTableReferences
 
   $$IdentificationsTableProcessedTableManager get identificationsRefs {
     final manager =
-        $$IdentificationsTableTableManager($_db, $_db.identifications).filter(
-            (f) => f.observationId.id.sqlEquals($_itemColumn<String>('id')!));
+        $$IdentificationsTableTableManager($_db, $_db.identifications)
+            .filter((f) => f.observationId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_identificationsRefsTable($_db));
@@ -6815,8 +6838,8 @@ final class $$ObservationsTableReferences
               db.observations.id, db.comments.observationId));
 
   $$CommentsTableProcessedTableManager get commentsRefs {
-    final manager = $$CommentsTableTableManager($_db, $_db.comments).filter(
-        (f) => f.observationId.id.sqlEquals($_itemColumn<String>('id')!));
+    final manager = $$CommentsTableTableManager($_db, $_db.comments)
+        .filter((f) => f.observationId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_commentsRefsTable($_db));
     return ProcessedTableManager(
@@ -7498,8 +7521,7 @@ class $$ObservationsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (photosRefs)
-                    await $_getPrefetchedData<Observation, $ObservationsTable,
-                            Photo>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable:
                             $$ObservationsTableReferences._photosRefsTable(db),
@@ -7511,8 +7533,7 @@ class $$ObservationsTableTableManager extends RootTableManager<
                                 .where((e) => e.observationId == item.id),
                         typedResults: items),
                   if (identificationsRefs)
-                    await $_getPrefetchedData<Observation, $ObservationsTable,
-                            Identification>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$ObservationsTableReferences
                             ._identificationsRefsTable(db),
@@ -7524,8 +7545,7 @@ class $$ObservationsTableTableManager extends RootTableManager<
                                 .where((e) => e.observationId == item.id),
                         typedResults: items),
                   if (commentsRefs)
-                    await $_getPrefetchedData<Observation, $ObservationsTable,
-                            Comment>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$ObservationsTableReferences
                             ._commentsRefsTable(db),
@@ -7594,10 +7614,8 @@ final class $$PhotosTableReferences
           $_aliasNameGenerator(db.photos.observationId, db.observations.id));
 
   $$ObservationsTableProcessedTableManager get observationId {
-    final $_column = $_itemColumn<String>('observation_id')!;
-
     final manager = $$ObservationsTableTableManager($_db, $_db.observations)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.observationId));
     final item = $_typedResult.readTableOrNull(_observationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7936,10 +7954,8 @@ final class $$IdentificationsTableReferences extends BaseReferences<
           db.identifications.observationId, db.observations.id));
 
   $$ObservationsTableProcessedTableManager get observationId {
-    final $_column = $_itemColumn<String>('observation_id')!;
-
     final manager = $$ObservationsTableTableManager($_db, $_db.observations)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.observationId));
     final item = $_typedResult.readTableOrNull(_observationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7951,10 +7967,8 @@ final class $$IdentificationsTableReferences extends BaseReferences<
           $_aliasNameGenerator(db.identifications.identifierId, db.users.id));
 
   $$UsersTableProcessedTableManager get identifierId {
-    final $_column = $_itemColumn<String>('identifier_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.identifierId));
     final item = $_typedResult.readTableOrNull(_identifierIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7971,8 +7985,7 @@ final class $$IdentificationsTableReferences extends BaseReferences<
   $$IdentificationVotesTableProcessedTableManager get identificationVotesRefs {
     final manager =
         $$IdentificationVotesTableTableManager($_db, $_db.identificationVotes)
-            .filter((f) =>
-                f.identificationId.id.sqlEquals($_itemColumn<String>('id')!));
+            .filter((f) => f.identificationId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_identificationVotesRefsTable($_db));
@@ -8400,8 +8413,7 @@ class $$IdentificationsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (identificationVotesRefs)
-                    await $_getPrefetchedData<Identification,
-                            $IdentificationsTable, IdentificationVote>(
+                    await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$IdentificationsTableReferences
                             ._identificationVotesRefsTable(db),
@@ -8457,11 +8469,9 @@ final class $$IdentificationVotesTableReferences extends BaseReferences<
           db.identificationVotes.identificationId, db.identifications.id));
 
   $$IdentificationsTableProcessedTableManager get identificationId {
-    final $_column = $_itemColumn<String>('identification_id')!;
-
     final manager =
         $$IdentificationsTableTableManager($_db, $_db.identifications)
-            .filter((f) => f.id.sqlEquals($_column));
+            .filter((f) => f.id($_item.identificationId));
     final item = $_typedResult.readTableOrNull(_identificationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8472,10 +8482,8 @@ final class $$IdentificationVotesTableReferences extends BaseReferences<
       $_aliasNameGenerator(db.identificationVotes.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
-    final $_column = $_itemColumn<String>('user_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8789,10 +8797,8 @@ final class $$CommentsTableReferences
           $_aliasNameGenerator(db.comments.observationId, db.observations.id));
 
   $$ObservationsTableProcessedTableManager get observationId {
-    final $_column = $_itemColumn<String>('observation_id')!;
-
     final manager = $$ObservationsTableTableManager($_db, $_db.observations)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.observationId));
     final item = $_typedResult.readTableOrNull(_observationIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8803,10 +8809,8 @@ final class $$CommentsTableReferences
       .createAlias($_aliasNameGenerator(db.comments.authorId, db.users.id));
 
   $$UsersTableProcessedTableManager get authorId {
-    final $_column = $_itemColumn<String>('author_id')!;
-
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.id.sqlEquals($_column));
+        .filter((f) => f.id($_item.authorId));
     final item = $_typedResult.readTableOrNull(_authorIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
