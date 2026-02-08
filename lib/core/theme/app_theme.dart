@@ -35,6 +35,7 @@ abstract class AppTheme {
           elevation: 0,
           centerTitle: true,
         ),
+        // ignore: deprecated_member_use
         cardTheme: CardTheme(
           color: AppColors.surfaceLight,
           elevation: 0,
@@ -82,6 +83,7 @@ abstract class AppTheme {
           elevation: 0,
           centerTitle: true,
         ),
+        // ignore: deprecated_member_use
         cardTheme: CardTheme(
           color: AppColors.surfaceDark,
           elevation: 0,
