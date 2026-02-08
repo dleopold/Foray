@@ -8,6 +8,7 @@ import '../../../../core/widgets/buttons/foray_button.dart';
 import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../database/database.dart';
 import '../../../../database/tables/observations_table.dart';
+import '../../../../database/tables/sync_queue_table.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../observations/presentation/widgets/species_search_field.dart';
 
@@ -45,7 +46,8 @@ class _AddIdentificationSheetState
         left: AppSpacing.screenPadding,
         right: AppSpacing.screenPadding,
         top: AppSpacing.screenPadding,
-        bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.screenPadding,
+        bottom:
+            MediaQuery.of(context).viewInsets.bottom + AppSpacing.screenPadding,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -84,7 +86,8 @@ class _AddIdentificationSheetState
           SegmentedButton<ConfidenceLevel>(
             segments: const [
               ButtonSegment(value: ConfidenceLevel.guess, label: Text('Guess')),
-              ButtonSegment(value: ConfidenceLevel.likely, label: Text('Likely')),
+              ButtonSegment(
+                  value: ConfidenceLevel.likely, label: Text('Likely')),
               ButtonSegment(
                   value: ConfidenceLevel.confident, label: Text('Confident')),
             ],
@@ -133,7 +136,8 @@ class _AddIdentificationSheetState
 
       final idId = const Uuid().v4();
 
-      await db.collaborationDao.addIdentification(IdentificationsCompanion.insert(
+      await db.collaborationDao
+          .addIdentification(IdentificationsCompanion.insert(
         id: idId,
         observationId: widget.observationId,
         identifierId: user.id,
@@ -147,12 +151,12 @@ class _AddIdentificationSheetState
       // Auto-vote for own ID
       await db.collaborationDao.addVote(idId, user.id);
 
-      // TODO: Queue for sync when Phase 9 is complete
-      // await db.syncDao.enqueue(
-      //   entityType: 'identification',
-      //   entityId: idId,
-      //   operation: SyncOperation.create,
-      // );
+      // Queue for sync
+      await db.syncDao.enqueue(
+        entityType: 'identification',
+        entityId: idId,
+        operation: SyncOperation.create,
+      );
 
       if (mounted) {
         Navigator.pop(context);

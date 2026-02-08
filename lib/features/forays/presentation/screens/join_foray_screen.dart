@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/foray_button.dart';
 import '../../../../core/widgets/inputs/foray_text_field.dart';
 import '../../../../database/database.dart';
 import '../../../../database/tables/forays_table.dart';
+import '../../../../database/tables/sync_queue_table.dart';
 import '../../../../routing/routes.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 
@@ -25,6 +27,7 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
   final _codeController = TextEditingController();
   bool _isLoading = false;
   bool _showScanner = false;
+  bool _hasScanned = false;
   String? _error;
 
   @override
@@ -41,7 +44,11 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
         actions: [
           IconButton(
             icon: Icon(_showScanner ? Icons.keyboard : Icons.qr_code_scanner),
-            onPressed: () => setState(() => _showScanner = !_showScanner),
+            onPressed: () => setState(() {
+              _showScanner = !_showScanner;
+              _hasScanned = false;
+              _error = null;
+            }),
             tooltip: _showScanner ? 'Enter code' : 'Scan QR code',
           ),
         ],
@@ -57,14 +64,12 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.xl),
-
           Icon(
             Icons.group_add,
             size: 64,
             color: Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(height: AppSpacing.lg),
-
           Text(
             'Enter Join Code',
             style: Theme.of(context).textTheme.headlineSmall,
@@ -76,9 +81,7 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: AppSpacing.xl),
-
           ForayTextField(
             controller: _codeController,
             hint: 'ABC123',
@@ -86,20 +89,20 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => _joinWithCode(),
           ),
-
           const SizedBox(height: AppSpacing.lg),
-
           ForayButton(
             onPressed: _joinWithCode,
             label: 'Join Foray',
             isLoading: _isLoading,
             fullWidth: true,
           ),
-
           const SizedBox(height: AppSpacing.xl),
-
           TextButton.icon(
-            onPressed: () => setState(() => _showScanner = true),
+            onPressed: () => setState(() {
+              _showScanner = true;
+              _hasScanned = false;
+              _error = null;
+            }),
             icon: const Icon(Icons.qr_code_scanner),
             label: const Text('Scan QR Code Instead'),
           ),
@@ -109,60 +112,55 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
   }
 
   Widget _buildScanner() {
-    // TODO: Implement QR scanner with mobile_scanner package
     return Stack(
       children: [
-        // Placeholder for scanner
-        Container(
-          color: Colors.black87,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.qr_code_scanner,
-                  size: 64,
-                  color: Colors.white.withOpacity(0.5),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  'QR Scanner Coming Soon',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  'For now, please enter the code manually',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white70,
-                      ),
-                ),
-              ],
+        // QR Scanner
+        MobileScanner(
+          onDetect: _onDetectBarcode,
+        ),
+        // Scan area frame
+        Center(
+          child: Container(
+            width: 250,
+            height: 250,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 3,
+              ),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
+        // Bottom controls
         Positioned(
           bottom: AppSpacing.xl,
           left: AppSpacing.screenPadding,
           right: AppSpacing.screenPadding,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Point camera at QR code',
-                    style: Theme.of(context).textTheme.bodyMedium,
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Point camera at QR code',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        TextButton(
+                          onPressed: () => setState(() => _showScanner = false),
+                          child: const Text('Enter code manually'),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
-                  TextButton(
-                    onPressed: () => setState(() => _showScanner = false),
-                    child: const Text('Enter code manually'),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -173,6 +171,22 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
           ),
       ],
     );
+  }
+
+  void _onDetectBarcode(BarcodeCapture capture) {
+    // Prevent multiple scans from being processed
+    if (_hasScanned || _isLoading) return;
+
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isEmpty) return;
+
+    final barcode = barcodes.first;
+    final String? rawValue = barcode.rawValue;
+
+    if (rawValue != null && rawValue.isNotEmpty) {
+      setState(() => _hasScanned = true);
+      _handleScannedCode(rawValue);
+    }
   }
 
   void _handleScannedCode(String value) {
@@ -232,8 +246,10 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
 
       // Check if foray is still active
       if (foray.status == ForayStatus.completed) {
-        setState(() => _error =
-            'This foray has been completed and is no longer accepting participants.');
+        setState(
+          () => _error =
+              'This foray has been completed and is no longer accepting participants.',
+        );
         return;
       }
 
@@ -244,12 +260,12 @@ class _JoinForayScreenState extends ConsumerState<JoinForayScreen> {
         role: ParticipantRole.participant,
       );
 
-      // TODO: Queue for sync when sync is implemented
-      // await db.syncDao.enqueue(
-      //   entityType: 'foray_participant',
-      //   entityId: '${foray.id}_${user.id}',
-      //   operation: SyncOperation.create,
-      // );
+      // Queue for sync
+      await db.syncDao.enqueue(
+        entityType: 'foray_participant',
+        entityId: '${foray.id}_${user.id}',
+        operation: SyncOperation.create,
+      );
 
       if (mounted) {
         context.go(AppRoutes.forayDetail.replaceFirst(':id', foray.id));

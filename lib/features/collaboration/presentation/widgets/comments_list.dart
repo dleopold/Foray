@@ -7,6 +7,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/feedback/foray_snackbar.dart';
 import '../../../../database/database.dart';
 import '../../../../database/daos/collaboration_dao.dart';
+import '../../../../database/tables/sync_queue_table.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../controllers/comments_controller.dart';
 
@@ -145,12 +146,12 @@ class _CommentsListState extends ConsumerState<CommentsList> {
         content: content,
       ));
 
-      // TODO: Queue for sync when Phase 9 is complete
-      // await db.syncDao.enqueue(
-      //   entityType: 'comment',
-      //   entityId: commentId,
-      //   operation: SyncOperation.create,
-      // );
+      // Queue for sync
+      await db.syncDao.enqueue(
+        entityType: 'comment',
+        entityId: commentId,
+        operation: SyncOperation.create,
+      );
 
       _commentController.clear();
     } catch (e) {

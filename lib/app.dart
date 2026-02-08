@@ -3,12 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
 import 'routing/router.dart';
+import 'services/sync/sync_queue_processor.dart';
 
-class ForayApp extends ConsumerWidget {
+class ForayApp extends ConsumerStatefulWidget {
   const ForayApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ForayApp> createState() => _ForayAppState();
+}
+
+class _ForayAppState extends ConsumerState<ForayApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Start the sync queue processor when the app launches
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(syncQueueProcessorProvider).start();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
 

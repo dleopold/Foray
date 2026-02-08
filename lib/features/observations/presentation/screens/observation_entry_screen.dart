@@ -16,6 +16,7 @@ import '../../../../core/widgets/inputs/foray_text_field.dart';
 import '../../../../database/database.dart';
 import '../../../../database/tables/forays_table.dart';
 import '../../../../database/tables/observations_table.dart';
+import '../../../../database/tables/sync_queue_table.dart';
 import '../../../../services/location/location_service.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../widgets/privacy_selector.dart';
@@ -615,14 +616,13 @@ class _ObservationEntryScreenState
       }
 
       // Queue for sync (only non-drafts)
-      // TODO: Enable when sync is implemented
-      // if (!isDraft) {
-      //   await db.syncDao.enqueue(
-      //     entityType: 'observation',
-      //     entityId: observationId,
-      //     operation: SyncOperation.create,
-      //   );
-      // }
+      if (!isDraft) {
+        await db.syncDao.enqueue(
+          entityType: 'observation',
+          entityId: observationId,
+          operation: SyncOperation.create,
+        );
+      }
 
       if (mounted) {
         ForaySnackbar.showSuccess(

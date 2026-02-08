@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/inputs/foray_text_field.dart';
@@ -22,6 +23,7 @@ class _SpecimenLookupSheetState extends ConsumerState<SpecimenLookupSheet> {
   final _controller = TextEditingController();
   bool _showScanner = false;
   bool _isSearching = false;
+  bool _hasScanned = false;
   String? _error;
 
   @override
@@ -61,7 +63,8 @@ class _SpecimenLookupSheetState extends ConsumerState<SpecimenLookupSheet> {
               // Header
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenPadding),
+                  horizontal: AppSpacing.screenPadding,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -71,9 +74,13 @@ class _SpecimenLookupSheetState extends ConsumerState<SpecimenLookupSheet> {
                     ),
                     IconButton(
                       icon: Icon(
-                          _showScanner ? Icons.keyboard : Icons.qr_code_scanner),
-                      onPressed: () =>
-                          setState(() => _showScanner = !_showScanner),
+                        _showScanner ? Icons.keyboard : Icons.qr_code_scanner,
+                      ),
+                      onPressed: () => setState(() {
+                        _showScanner = !_showScanner;
+                        _hasScanned = false;
+                        _error = null;
+                      }),
                       tooltip: _showScanner ? 'Enter manually' : 'Scan QR code',
                     ),
                   ],
@@ -120,40 +127,79 @@ class _SpecimenLookupSheetState extends ConsumerState<SpecimenLookupSheet> {
   }
 
   Widget _buildScanner() {
-    // TODO: Implement actual QR scanning with mobile_scanner package
-    // For now, show a placeholder
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.screenPadding),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.qr_code_scanner,
-              size: 100,
-              color: Theme.of(context).colorScheme.outline,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'QR Scanner',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              'Barcode/QR scanning will be available soon.\n'
-              'Please use manual entry for now.',
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutlinedButton(
-              onPressed: () => setState(() => _showScanner = false),
-              child: const Text('Enter Manually'),
-            ),
-          ],
+    return Column(
+      children: [
+        // QR Scanner
+        Expanded(
+          child: Stack(
+            children: [
+              MobileScanner(
+                onDetect: _onDetectBarcode,
+              ),
+              // Scan area frame
+              Center(
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+        // Bottom controls
+        Padding(
+          padding: const EdgeInsets.all(AppSpacing.screenPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Point camera at specimen QR code',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              OutlinedButton(
+                onPressed: () => setState(() {
+                  _showScanner = false;
+                  _hasScanned = false;
+                }),
+                child: const Text('Enter Manually'),
+              ),
+            ],
+          ),
+        ),
+        if (_isSearching)
+          Container(
+            color: Colors.black54,
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+      ],
     );
+  }
+
+  void _onDetectBarcode(BarcodeCapture capture) {
+    // Prevent multiple scans from being processed
+    if (_hasScanned || _isSearching) return;
+
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isEmpty) return;
+
+    final barcode = barcodes.first;
+    final String? rawValue = barcode.rawValue;
+
+    if (rawValue != null && rawValue.isNotEmpty) {
+      setState(() {
+        _hasScanned = true;
+        _controller.text = rawValue;
+      });
+      _search();
+    }
   }
 
   Future<void> _search() async {

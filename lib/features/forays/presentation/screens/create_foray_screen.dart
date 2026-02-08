@@ -13,6 +13,7 @@ import '../../../../core/widgets/inputs/foray_text_field.dart';
 import '../../../../core/constants/privacy_levels.dart' as constants;
 import '../../../../database/database.dart';
 import '../../../../database/tables/forays_table.dart';
+import '../../../../database/tables/sync_queue_table.dart';
 import '../../../../routing/routes.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 
@@ -88,8 +89,7 @@ class _CreateForayScreenState extends ConsumerState<CreateForayScreen> {
                 final picked = await showDatePicker(
                   context: context,
                   initialDate: _date,
-                  firstDate:
-                      DateTime.now().subtract(const Duration(days: 365)),
+                  firstDate: DateTime.now().subtract(const Duration(days: 365)),
                   lastDate: DateTime.now().add(const Duration(days: 365)),
                 );
                 if (picked != null) {
@@ -198,12 +198,12 @@ class _CreateForayScreenState extends ConsumerState<CreateForayScreen> {
         role: ParticipantRole.organizer,
       );
 
-      // TODO: Queue for sync when sync is implemented
-      // await db.syncDao.enqueue(
-      //   entityType: 'foray',
-      //   entityId: forayId,
-      //   operation: SyncOperation.create,
-      // );
+      // Queue for sync
+      await db.syncDao.enqueue(
+        entityType: 'foray',
+        entityId: forayId,
+        operation: SyncOperation.create,
+      );
 
       if (mounted) {
         context.go(AppRoutes.forayDetail.replaceFirst(':id', forayId));
