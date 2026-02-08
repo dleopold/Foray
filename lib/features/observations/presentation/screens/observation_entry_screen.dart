@@ -586,24 +586,24 @@ class _ObservationEntryScreenState
         observedAt: DateTime.now(),
         specimenId: Value(_specimenIdController.text.trim().isEmpty
             ? null
-            : _specimenIdController.text.trim()),
+            : _specimenIdController.text.trim(),),
         collectionNumber: Value(_collectionNumberController.text.trim().isEmpty
             ? null
-            : _collectionNumberController.text.trim()),
+            : _collectionNumberController.text.trim(),),
         substrate: Value(_substrate),
         habitatNotes: Value(_habitatNotesController.text.trim().isEmpty
             ? null
-            : _habitatNotesController.text.trim()),
+            : _habitatNotesController.text.trim(),),
         fieldNotes: Value(_fieldNotesController.text.trim().isEmpty
             ? null
-            : _fieldNotesController.text.trim()),
+            : _fieldNotesController.text.trim(),),
         sporePrintColor: Value(_sporePrintColor),
         preliminaryId: Value(_preliminaryId),
         preliminaryIdConfidence:
             Value(_preliminaryId != null ? _confidence : null),
         privacyLevel: Value(_privacyLevel),
         isDraft: Value(isDraft),
-      ));
+      ),);
 
       // Add photos
       for (var i = 0; i < _photos.length; i++) {
@@ -612,7 +612,7 @@ class _ObservationEntryScreenState
           observationId: observationId,
           localPath: _photos[i].path,
           sortOrder: Value(i),
-        ));
+        ),);
       }
 
       // Queue for sync (only non-drafts)

@@ -262,7 +262,7 @@ class ForayEnumDropdown<T extends Enum> extends StatelessWidget {
         .split(' ')
         .map((word) => word.isEmpty
             ? ''
-            : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+            : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}',)
         .join(' ');
   }
 }

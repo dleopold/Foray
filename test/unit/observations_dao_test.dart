@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:foray/database/database.dart';
 import 'package:foray/database/daos/observations_dao.dart';
 import 'package:foray/database/tables/forays_table.dart';
-import 'package:foray/database/tables/observations_table.dart';
 import 'package:foray/database/tables/photos_table.dart';
 
 void main() {
@@ -90,7 +89,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         final retrieved = await dao.getObservationById('obs-1');
         expect(retrieved, isNotNull);
@@ -103,7 +102,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         final obs = await dao.getObservationById('obs-1');
         expect(obs, isNotNull);
@@ -155,7 +154,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         final observations = await dao.getObservationsForForay(foray.id);
         expect(observations.length, equals(1));
@@ -167,13 +166,13 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo.jpg',
-        ));
+        ),);
 
         final observations = await dao.getObservationsForForay(foray.id);
         expect(observations.first.photos.length, equals(1));
@@ -187,9 +186,9 @@ void main() {
         final user2 = await createTestUser('user-2');
         final foray = await createTestForay('foray-1', user1.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user1.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user1.id,);
         await createTestObservation(
-            id: 'obs-2', forayId: foray.id, collectorId: user2.id);
+            id: 'obs-2', forayId: foray.id, collectorId: user2.id,);
 
         final observations = await dao.getObservationsForUser(user1.id);
         expect(observations.length, equals(1));
@@ -202,7 +201,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.updateObservation(
           'obs-1',
@@ -219,7 +218,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.deleteObservation('obs-1');
 
@@ -231,12 +230,12 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo.jpg',
-        ));
+        ),);
 
         await dao.deleteObservation('obs-1');
 
@@ -250,7 +249,7 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         final before = DateTime.now();
         await Future.delayed(const Duration(milliseconds: 50));
@@ -259,7 +258,7 @@ void main() {
         final obs = await dao.getObservationById('obs-1');
         // Allow small buffer for SQLite timestamp truncation
         expect(obs!.lastViewedAt!.difference(before).inMilliseconds >= -1000,
-            isTrue);
+            isTrue,);
       });
     });
 
@@ -268,13 +267,13 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo.jpg',
-        ));
+        ),);
 
         final photos = await dao.getPhotosForObservation(obs.id);
         expect(photos.length, equals(1));
@@ -287,12 +286,12 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo.jpg',
-        ));
+        ),);
 
         await dao.deletePhoto('photo-1');
 
@@ -306,12 +305,12 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo.jpg',
-        ));
+        ),);
 
         await dao.updatePhotoUploadStatus(
           'photo-1',
@@ -330,19 +329,19 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo1.jpg',
-        ));
+        ),);
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-2',
           observationId: obs.id,
           localPath: '/path/to/photo2.jpg',
           uploadStatus: const Value(UploadStatus.uploaded),
-        ));
+        ),);
 
         final pending = await dao.getPhotosPendingUpload();
         expect(pending.length, equals(1));
@@ -355,20 +354,20 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         final obs = await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-1',
           observationId: obs.id,
           localPath: '/path/to/photo1.jpg',
           sortOrder: const Value(0),
-        ));
+        ),);
         await dao.addPhoto(PhotosCompanion.insert(
           id: 'photo-2',
           observationId: obs.id,
           localPath: '/path/to/photo2.jpg',
           sortOrder: const Value(1),
-        ));
+        ),);
 
         await dao.reorderPhotos(obs.id, ['photo-2', 'photo-1']);
 
@@ -385,10 +384,10 @@ void main() {
         final user = await createTestUser('user-1');
         final foray = await createTestForay('foray-1', user.id);
         await createTestObservation(
-            id: 'obs-1', forayId: foray.id, collectorId: user.id);
+            id: 'obs-1', forayId: foray.id, collectorId: user.id,);
 
         await dao.updateSyncStatus('obs-1', SyncStatus.synced,
-            remoteId: 'remote-123');
+            remoteId: 'remote-123',);
 
         final obs = await dao.getObservationById('obs-1');
         expect(obs!.syncStatus, equals(SyncStatus.synced));
@@ -402,12 +401,12 @@ void main() {
             id: 'obs-1',
             forayId: foray.id,
             collectorId: user.id,
-            isDraft: true);
+            isDraft: true,);
         final obs2 = await createTestObservation(
             id: 'obs-2',
             forayId: foray.id,
             collectorId: user.id,
-            isDraft: false);
+            isDraft: false,);
         // Set to pending (default is local)
         await dao.updateSyncStatus(obs2.id, SyncStatus.pending);
 

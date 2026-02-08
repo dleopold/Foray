@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:foray/database/database.dart';
 import 'package:foray/database/daos/users_dao.dart';
-import 'package:foray/database/tables/users_table.dart';
 
 void main() {
   group('UsersDao', () {
@@ -183,7 +182,7 @@ void main() {
 
         final user = await dao.getUserById('user-1');
         expect(
-            user!.updatedAt.difference(before).inMilliseconds >= -1000, isTrue);
+            user!.updatedAt.difference(before).inMilliseconds >= -1000, isTrue,);
       });
     });
 
@@ -221,7 +220,7 @@ void main() {
 
         final user = await dao.getUserById('user-1');
         expect(
-            user!.updatedAt.difference(before).inMilliseconds >= -1000, isTrue);
+            user!.updatedAt.difference(before).inMilliseconds >= -1000, isTrue,);
       });
     });
 

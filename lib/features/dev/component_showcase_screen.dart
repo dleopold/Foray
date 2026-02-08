@@ -110,7 +110,7 @@ class _ComponentShowcaseScreenState
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
       children: [
-        _SectionHeader('Primary Buttons'),
+        const _SectionHeader('Primary Buttons'),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
@@ -137,7 +137,7 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Secondary Buttons'),
+        const _SectionHeader('Secondary Buttons'),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
@@ -157,7 +157,7 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Text Buttons'),
+        const _SectionHeader('Text Buttons'),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
@@ -177,7 +177,7 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Button Sizes'),
+        const _SectionHeader('Button Sizes'),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
@@ -202,7 +202,7 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Full Width'),
+        const _SectionHeader('Full Width'),
         const SizedBox(height: AppSpacing.sm),
         ForayButton(
           onPressed: () {},
@@ -217,7 +217,7 @@ class _ComponentShowcaseScreenState
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
       children: [
-        _SectionHeader('Text Fields'),
+        const _SectionHeader('Text Fields'),
         const SizedBox(height: AppSpacing.sm),
         ForayTextField(
           controller: _textController,
@@ -247,7 +247,7 @@ class _ComponentShowcaseScreenState
           maxLines: 3,
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Dropdown'),
+        const _SectionHeader('Dropdown'),
         const SizedBox(height: AppSpacing.sm),
         ForayDropdown<String>(
           label: 'Substrate',
@@ -257,7 +257,7 @@ class _ComponentShowcaseScreenState
           onChanged: (value) => setState(() => _selectedDropdown = value),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Switch'),
+        const _SectionHeader('Switch'),
         const SizedBox(height: AppSpacing.sm),
         ForaySwitch(
           value: _switchValue,
@@ -266,14 +266,14 @@ class _ComponentShowcaseScreenState
           subtitle: 'Receive updates about new identifications',
         ),
         const SizedBox(height: AppSpacing.md),
-        ForaySwitch(
+        const ForaySwitch(
           value: true,
           onChanged: null,
           label: 'Disabled switch',
           enabled: false,
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Checkbox'),
+        const _SectionHeader('Checkbox'),
         const SizedBox(height: AppSpacing.sm),
         ForayCheckbox(
           value: _checkboxValue,
@@ -297,21 +297,21 @@ class _ComponentShowcaseScreenState
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
       children: [
-        _SectionHeader('Cards'),
+        const _SectionHeader('Cards'),
         const SizedBox(height: AppSpacing.sm),
-        ForayCard(
+        const ForayCard(
           variant: ForayCardVariant.flat,
-          child: const Text('Flat card'),
+          child: Text('Flat card'),
         ),
         const SizedBox(height: AppSpacing.md),
-        ForayCard(
+        const ForayCard(
           variant: ForayCardVariant.raised,
-          child: const Text('Raised card with shadow'),
+          child: Text('Raised card with shadow'),
         ),
         const SizedBox(height: AppSpacing.md),
-        ForayCard(
+        const ForayCard(
           variant: ForayCardVariant.outlined,
-          child: const Text('Outlined card'),
+          child: Text('Outlined card'),
         ),
         const SizedBox(height: AppSpacing.md),
         ForayCard(
@@ -320,12 +320,12 @@ class _ComponentShowcaseScreenState
           child: const Text('Tappable card'),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Structured Card'),
+        const _SectionHeader('Structured Card'),
         const SizedBox(height: AppSpacing.sm),
         ForayCardStructured(
           variant: ForayCardVariant.outlined,
           header: const Text('Card Header',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: TextStyle(fontWeight: FontWeight.bold),),
           content: const Text('This is the main content area of the card.'),
           footer: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -340,7 +340,7 @@ class _ComponentShowcaseScreenState
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('List Tiles'),
+        const _SectionHeader('List Tiles'),
         const SizedBox(height: AppSpacing.sm),
         ForayCard(
           padding: EdgeInsets.zero,
@@ -373,13 +373,13 @@ class _ComponentShowcaseScreenState
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Avatars'),
+        const _SectionHeader('Avatars'),
         const SizedBox(height: AppSpacing.sm),
-        Wrap(
+        const Wrap(
           spacing: AppSpacing.md,
           runSpacing: AppSpacing.md,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: const [
+          children: [
             ForayAvatar(initials: 'XS', size: ForayAvatarSize.xs),
             ForayAvatar(initials: 'SM', size: ForayAvatarSize.small),
             ForayAvatar(initials: 'MD', size: ForayAvatarSize.medium),
@@ -388,8 +388,8 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.md),
-        ForayAvatarStack(
-          avatars: const [
+        const ForayAvatarStack(
+          avatars: [
             (imageUrl: null, initials: 'AB'),
             (imageUrl: null, initials: 'CD'),
             (imageUrl: null, initials: 'EF'),
@@ -400,19 +400,19 @@ class _ComponentShowcaseScreenState
           maxVisible: 4,
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Badges'),
+        const _SectionHeader('Badges'),
         const SizedBox(height: AppSpacing.sm),
-        Wrap(
+        const Wrap(
           spacing: AppSpacing.sm,
           runSpacing: AppSpacing.sm,
           children: [
-            const ForayBadge(label: 'Primary', variant: ForayBadgeVariant.primary),
-            const ForayBadge(label: 'Secondary', variant: ForayBadgeVariant.secondary),
-            const ForayBadge(label: 'Success', variant: ForayBadgeVariant.success),
-            const ForayBadge(label: 'Warning', variant: ForayBadgeVariant.warning),
-            const ForayBadge(label: 'Error', variant: ForayBadgeVariant.error),
-            const ForayBadge(label: 'Info', variant: ForayBadgeVariant.info),
-            const ForayBadge(label: 'Neutral', variant: ForayBadgeVariant.neutral),
+            ForayBadge(label: 'Primary', variant: ForayBadgeVariant.primary),
+            ForayBadge(label: 'Secondary', variant: ForayBadgeVariant.secondary),
+            ForayBadge(label: 'Success', variant: ForayBadgeVariant.success),
+            ForayBadge(label: 'Warning', variant: ForayBadgeVariant.warning),
+            ForayBadge(label: 'Error', variant: ForayBadgeVariant.error),
+            ForayBadge(label: 'Info', variant: ForayBadgeVariant.info),
+            ForayBadge(label: 'Neutral', variant: ForayBadgeVariant.neutral),
           ],
         ),
         const SizedBox(height: AppSpacing.md),
@@ -447,7 +447,7 @@ class _ComponentShowcaseScreenState
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
       children: [
-        _SectionHeader('Snackbars'),
+        const _SectionHeader('Snackbars'),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
@@ -490,7 +490,7 @@ class _ComponentShowcaseScreenState
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Empty States'),
+        const _SectionHeader('Empty States'),
         const SizedBox(height: AppSpacing.sm),
         ForayCard(
           child: EmptyState.noObservations(
@@ -510,7 +510,7 @@ class _ComponentShowcaseScreenState
           child: EmptyState.noComments(),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionHeader('Loading Shimmers'),
+        const _SectionHeader('Loading Shimmers'),
         const SizedBox(height: AppSpacing.sm),
         const Text('Text Line'),
         const SizedBox(height: AppSpacing.xs),
@@ -537,9 +537,9 @@ class _ComponentShowcaseScreenState
   Widget _buildIndicatorsTab(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
-      children: [
+      children: const [
         _SectionHeader('Privacy Badges'),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.md,
           runSpacing: AppSpacing.md,
@@ -550,7 +550,7 @@ class _ComponentShowcaseScreenState
             PrivacyBadge(level: PrivacyLevel.publicObscured),
           ],
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         Wrap(
           spacing: AppSpacing.md,
           runSpacing: AppSpacing.md,
@@ -561,9 +561,9 @@ class _ComponentShowcaseScreenState
             PrivacyBadge(level: PrivacyLevel.publicObscured, showLabel: false),
           ],
         ),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.lg),
         _SectionHeader('Sync Status'),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.md,
           runSpacing: AppSpacing.md,
@@ -574,10 +574,10 @@ class _ComponentShowcaseScreenState
             SyncStatusIndicator(status: SyncStatus.failed, showLabel: true),
           ],
         ),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.lg),
         _SectionHeader('GPS Accuracy'),
-        const SizedBox(height: AppSpacing.sm),
-        const Wrap(
+        SizedBox(height: AppSpacing.sm),
+        Wrap(
           spacing: AppSpacing.md,
           runSpacing: AppSpacing.md,
           children: [
@@ -588,27 +588,27 @@ class _ComponentShowcaseScreenState
             GpsAccuracyIndicator(accuracyMeters: null),
           ],
         ),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.lg),
         _SectionHeader('Typography'),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text('Headline Large', style: AppTypography.headlineLarge),
         Text('Headline Medium', style: AppTypography.headlineMedium),
         Text('Headline Small', style: AppTypography.headlineSmall),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text('Title Large', style: AppTypography.titleLarge),
         Text('Title Medium', style: AppTypography.titleMedium),
         Text('Title Small', style: AppTypography.titleSmall),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text('Body Large', style: AppTypography.bodyLarge),
         Text('Body Medium', style: AppTypography.bodyMedium),
         Text('Body Small', style: AppTypography.bodySmall),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text('Label Large', style: AppTypography.labelLarge),
         Text('Label Medium', style: AppTypography.labelMedium),
         Text('Label Small', style: AppTypography.labelSmall),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.lg),
         _SectionHeader('Colors'),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
           runSpacing: AppSpacing.sm,

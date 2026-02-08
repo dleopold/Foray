@@ -194,7 +194,7 @@ void main() {
       test('updates specified fields', () async {
         final user = await createTestUser('user-1');
         await createTestForay(
-            id: 'foray-1', creatorId: user.id, name: 'Original');
+            id: 'foray-1', creatorId: user.id, name: 'Original',);
 
         await dao.updateForay(
           'foray-1',
@@ -221,7 +221,7 @@ void main() {
         final foray = await dao.getForayById('foray-1');
         // Allow small buffer for SQLite timestamp truncation
         expect(foray!.updatedAt.difference(before).inMilliseconds >= -1000,
-            isTrue);
+            isTrue,);
       });
     });
 
@@ -395,7 +395,7 @@ void main() {
         await createTestForay(id: 'foray-1', creatorId: user.id);
 
         await dao.updateSyncStatus('foray-1', SyncStatus.synced,
-            remoteId: 'remote-123');
+            remoteId: 'remote-123',);
 
         final foray = await dao.getForayById('foray-1');
         expect(foray!.syncStatus, equals(SyncStatus.synced));

@@ -110,7 +110,7 @@ class _DistanceDisplayState extends State<DistanceDisplay>
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 200),
       opacity: isGettingCloser ? 1.0 : 0.0,
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
@@ -118,7 +118,7 @@ class _DistanceDisplayState extends State<DistanceDisplay>
             size: 16,
             color: AppColors.success,
           ),
-          const SizedBox(width: AppSpacing.xs),
+          SizedBox(width: AppSpacing.xs),
           Text(
             'Getting closer',
             style: TextStyle(

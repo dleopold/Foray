@@ -197,7 +197,7 @@ class ForaySwitchGroup extends StatelessWidget {
         ...children.map((child) => Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: child,
-            )),
+            ),),
       ],
     );
   }

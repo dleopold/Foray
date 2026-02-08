@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:foray/database/database.dart';
@@ -296,7 +295,7 @@ void main() {
 
         expect(await dao.getCountByStatus(SyncQueueStatus.pending), equals(1));
         expect(
-            await dao.getCountByStatus(SyncQueueStatus.completed), equals(1));
+            await dao.getCountByStatus(SyncQueueStatus.completed), equals(1),);
         expect(await dao.getCountByStatus(SyncQueueStatus.failed), equals(0));
       });
     });

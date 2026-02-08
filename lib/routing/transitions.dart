@@ -20,7 +20,7 @@ abstract class AppTransitions {
           ).animate(CurvedAnimation(
             parent: animation,
             curve: Curves.easeOutCubic,
-          )),
+          ),),
           child: FadeTransition(
             opacity: animation,
             child: child,
@@ -49,7 +49,7 @@ abstract class AppTransitions {
           ).animate(CurvedAnimation(
             parent: animation,
             curve: Curves.easeOutCubic,
-          )),
+          ),),
           child: child,
         );
       },
@@ -98,7 +98,7 @@ abstract class AppTransitions {
           ).animate(CurvedAnimation(
             parent: animation,
             curve: Curves.easeOutCubic,
-          )),
+          ),),
           child: FadeTransition(
             opacity: animation,
             child: child,

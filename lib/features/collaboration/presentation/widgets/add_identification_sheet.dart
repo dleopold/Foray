@@ -87,9 +87,9 @@ class _AddIdentificationSheetState
             segments: const [
               ButtonSegment(value: ConfidenceLevel.guess, label: Text('Guess')),
               ButtonSegment(
-                  value: ConfidenceLevel.likely, label: Text('Likely')),
+                  value: ConfidenceLevel.likely, label: Text('Likely'),),
               ButtonSegment(
-                  value: ConfidenceLevel.confident, label: Text('Confident')),
+                  value: ConfidenceLevel.confident, label: Text('Confident'),),
             ],
             selected: {_confidence},
             onSelectionChanged: (selection) {
@@ -145,8 +145,8 @@ class _AddIdentificationSheetState
         confidence: Value(_confidence),
         notes: Value(_notesController.text.trim().isEmpty
             ? null
-            : _notesController.text.trim()),
-      ));
+            : _notesController.text.trim(),),
+      ),);
 
       // Auto-vote for own ID
       await db.collaborationDao.addVote(idId, user.id);

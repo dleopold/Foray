@@ -22,7 +22,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Create a new observation.
   Future<Observation> createObservation(
-      ObservationsCompanion observation) async {
+      ObservationsCompanion observation,) async {
     await into(observations).insert(observation);
     return (select(observations)
           ..where((o) => o.id.equals(observation.id.value)))
@@ -37,16 +37,16 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Get an observation by specimen ID within a foray.
   Future<Observation?> getObservationBySpecimenId(
-      String forayId, String specimenId) {
+      String forayId, String specimenId,) {
     return (select(observations)
           ..where(
-              (o) => o.forayId.equals(forayId) & o.specimenId.equals(specimenId)))
+              (o) => o.forayId.equals(forayId) & o.specimenId.equals(specimenId),))
         .getSingleOrNull();
   }
 
   /// Get all observations for a foray with collector and photos.
   Future<List<ObservationWithDetails>> getObservationsForForay(
-      String forayId) async {
+      String forayId,) async {
     final query = select(observations).join([
       leftOuterJoin(users, users.id.equalsExp(observations.collectorId)),
     ])
@@ -75,7 +75,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Watch observations for a foray with real-time updates.
   Stream<List<ObservationWithDetails>> watchObservationsForForay(
-      String forayId) {
+      String forayId,) {
     final obsQuery = select(observations)
       ..where((o) => o.forayId.equals(forayId))
       ..orderBy([(o) => OrderingTerm.desc(o.observedAt)]);
@@ -94,7 +94,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
           observation: obs,
           collector: collector,
           photos: obsPhotos,
-        ));
+        ),);
       }
       return details;
     });
@@ -152,7 +152,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Update photo upload status.
   Future<void> updatePhotoUploadStatus(String id, UploadStatus status,
-      {String? remoteUrl}) {
+      {String? remoteUrl,}) {
     return (update(photos)..where((p) => p.id.equals(id))).write(
       PhotosCompanion(
         uploadStatus: Value(status),
@@ -169,7 +169,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Reorder photos for an observation.
   Future<void> reorderPhotos(
-      String observationId, List<String> photoIds) async {
+      String observationId, List<String> photoIds,) async {
     await transaction(() async {
       for (var i = 0; i < photoIds.length; i++) {
         await (update(photos)..where((p) => p.id.equals(photoIds[i]))).write(
@@ -187,7 +187,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
   Future<List<Observation>> getObservationsPendingSync() {
     return (select(observations)
           ..where(
-              (o) => o.syncStatus.equals('pending') & o.isDraft.equals(false)))
+              (o) => o.syncStatus.equals('pending') & o.isDraft.equals(false),))
         .get();
   }
 
@@ -199,7 +199,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Update sync status for an observation.
   Future<void> updateSyncStatus(String id, SyncStatus status,
-      {String? remoteId}) {
+      {String? remoteId,}) {
     return (update(observations)..where((o) => o.id.equals(id))).write(
       ObservationsCompanion(
         syncStatus: Value(status),
@@ -249,7 +249,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
       preliminaryId: Value(preliminaryId),
       preliminaryIdConfidence: Value(preliminaryIdConfidence != null 
         ? ConfidenceLevel.values.firstWhere((e) => e.name == preliminaryIdConfidence)
-        : null),
+        : null,),
       isDraft: const Value(false),
       syncStatus: const Value(SyncStatus.synced),
     );
@@ -291,7 +291,7 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
         preliminaryId: Value(preliminaryId),
         preliminaryIdConfidence: Value(preliminaryIdConfidence != null 
           ? ConfidenceLevel.values.firstWhere((e) => e.name == preliminaryIdConfidence)
-          : null),
+          : null,),
         syncStatus: const Value(SyncStatus.synced),
         updatedAt: Value(DateTime.now()),
       ),
@@ -338,10 +338,10 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
   /// Check if a specimen ID is unique within a foray.
   Future<bool> isSpecimenIdUnique(
-      String forayId, String specimenId, String? excludeId) async {
+      String forayId, String specimenId, String? excludeId,) async {
     var query = select(observations)
       ..where(
-          (o) => o.forayId.equals(forayId) & o.specimenId.equals(specimenId));
+          (o) => o.forayId.equals(forayId) & o.specimenId.equals(specimenId),);
 
     if (excludeId != null) {
       query = query..where((o) => o.id.equals(excludeId).not());
@@ -358,15 +358,15 @@ class ObservationsDao extends DatabaseAccessor<AppDatabase>
 
 /// An observation with its collector and photos.
 class ObservationWithDetails {
-  final Observation observation;
-  final User? collector;
-  final List<Photo> photos;
 
   ObservationWithDetails({
     required this.observation,
     this.collector,
     required this.photos,
   });
+  final Observation observation;
+  final User? collector;
+  final List<Photo> photos;
 
   /// Get the primary (first) photo, if any.
   Photo? get primaryPhoto => photos.isNotEmpty ? photos.first : null;

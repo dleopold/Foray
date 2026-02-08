@@ -192,7 +192,7 @@ class _ForayMapTabState extends ConsumerState<ForayMapTab> {
     final bounds = LatLngBounds.fromPoints(
       observations
           .map(
-              (o) => LatLng(o.observation.latitude, o.observation.longitude))
+              (o) => LatLng(o.observation.latitude, o.observation.longitude),)
           .toList(),
     );
 

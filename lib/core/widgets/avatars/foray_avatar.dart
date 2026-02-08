@@ -56,6 +56,27 @@ class ForayAvatar extends StatelessWidget {
     this.onTap,
   });
 
+  /// Creates an avatar from a user's name.
+  factory ForayAvatar.fromName({
+    Key? key,
+    required String name,
+    String? imageUrl,
+    ForayAvatarSize size = ForayAvatarSize.medium,
+    Color? backgroundColor,
+    Widget? badge,
+    VoidCallback? onTap,
+  }) {
+    return ForayAvatar(
+      key: key,
+      imageUrl: imageUrl,
+      initials: _getInitials(name),
+      size: size,
+      backgroundColor: backgroundColor,
+      badge: badge,
+      onTap: onTap,
+    );
+  }
+
   /// URL of the avatar image.
   final String? imageUrl;
 
@@ -85,27 +106,6 @@ class ForayAvatar extends StatelessWidget {
 
   /// Called when the avatar is tapped.
   final VoidCallback? onTap;
-
-  /// Creates an avatar from a user's name.
-  factory ForayAvatar.fromName({
-    Key? key,
-    required String name,
-    String? imageUrl,
-    ForayAvatarSize size = ForayAvatarSize.medium,
-    Color? backgroundColor,
-    Widget? badge,
-    VoidCallback? onTap,
-  }) {
-    return ForayAvatar(
-      key: key,
-      imageUrl: imageUrl,
-      initials: _getInitials(name),
-      size: size,
-      backgroundColor: backgroundColor,
-      badge: badge,
-      onTap: onTap,
-    );
-  }
 
   static String _getInitials(String name) {
     final parts = name.trim().split(RegExp(r'\s+'));

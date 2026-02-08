@@ -31,11 +31,11 @@ final positionStreamProvider = StreamProvider<Position>((ref) {
 class LocationService {
   // Simulated locations for web demo (Pacific Northwest mushroom hotspots)
   static final _simulatedPositions = [
-    _SimulatedPosition(47.6062, -122.3321, 'Seattle'),
-    _SimulatedPosition(47.6205, -122.3493, 'Queen Anne'),
-    _SimulatedPosition(47.5480, -122.0354, 'Tiger Mountain'),
-    _SimulatedPosition(47.4799, -121.7817, 'Snoqualmie'),
-    _SimulatedPosition(47.7511, -122.3244, 'Carkeek Park'),
+    const _SimulatedPosition(47.6062, -122.3321, 'Seattle'),
+    const _SimulatedPosition(47.6205, -122.3493, 'Queen Anne'),
+    const _SimulatedPosition(47.5480, -122.0354, 'Tiger Mountain'),
+    const _SimulatedPosition(47.4799, -121.7817, 'Snoqualmie'),
+    const _SimulatedPosition(47.7511, -122.3244, 'Carkeek Park'),
   ];
 
   int _simulatedIndex = 0;
@@ -52,7 +52,7 @@ class LocationService {
       return true;
     }
 
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       if (kDebugMode) {
         debugPrint('Location services are disabled');
@@ -102,7 +102,7 @@ class LocationService {
       return await Geolocator.getCurrentPosition(
         desiredAccuracy: accuracy,
         timeLimit: timeout ??
-            Duration(seconds: AppConstants.gpsTimeoutSeconds),
+            const Duration(seconds: AppConstants.gpsTimeoutSeconds),
       );
     } catch (e) {
       if (kDebugMode) {

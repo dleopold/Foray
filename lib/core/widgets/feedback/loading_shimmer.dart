@@ -22,29 +22,6 @@ class LoadingShimmer extends StatelessWidget {
     required this.child,
   });
 
-  /// The placeholder content to animate with shimmer.
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final baseColor = isDark
-        ? AppColors.surfaceDark
-        : Colors.grey[300]!;
-
-    final highlightColor = isDark
-        ? AppColors.dividerDark
-        : Colors.grey[100]!;
-
-    return Shimmer.fromColors(
-      baseColor: baseColor,
-      highlightColor: highlightColor,
-      child: child,
-    );
-  }
-
   /// Creates a shimmer placeholder for a single line of text.
   factory LoadingShimmer.textLine({
     Key? key,
@@ -189,49 +166,49 @@ class LoadingShimmer extends StatelessWidget {
       key: key,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image placeholder
-            const _ShimmerBox(
+            _ShimmerBox(
               height: 180,
               borderRadius: AppSpacing.radiusMd,
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             // Title
-            const FractionallySizedBox(
+            FractionallySizedBox(
               widthFactor: 0.7,
               child: _ShimmerBox(
                 height: 18,
                 borderRadius: 4,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             // Subtitle
-            const FractionallySizedBox(
+            FractionallySizedBox(
               widthFactor: 0.4,
               child: _ShimmerBox(
                 height: 14,
                 borderRadius: 4,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             // Footer row
             Row(
               children: [
-                const _ShimmerBox(
+                _ShimmerBox(
                   width: 60,
                   height: 24,
                   borderRadius: 12,
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                const _ShimmerBox(
+                SizedBox(width: AppSpacing.sm),
+                _ShimmerBox(
                   width: 80,
                   height: 24,
                   borderRadius: 12,
                 ),
-                const Spacer(),
-                const _ShimmerBox(
+                Spacer(),
+                _ShimmerBox(
                   width: 24,
                   height: 24,
                   borderRadius: 4,
@@ -250,27 +227,27 @@ class LoadingShimmer extends StatelessWidget {
       key: key,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const _ShimmerBox(
+                _ShimmerBox(
                   width: 48,
                   height: 48,
                   borderRadius: 24,
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const _ShimmerBox(
+                      _ShimmerBox(
                         height: 18,
                         borderRadius: 4,
                       ),
-                      const SizedBox(height: 8),
-                      const FractionallySizedBox(
+                      SizedBox(height: 8),
+                      FractionallySizedBox(
                         widthFactor: 0.5,
                         child: _ShimmerBox(
                           height: 14,
@@ -282,16 +259,16 @@ class LoadingShimmer extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Row(
               children: [
-                const _ShimmerBox(
+                _ShimmerBox(
                   width: 80,
                   height: 28,
                   borderRadius: 14,
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                const _ShimmerBox(
+                SizedBox(width: AppSpacing.sm),
+                _ShimmerBox(
                   width: 100,
                   height: 28,
                   borderRadius: 14,
@@ -301,6 +278,29 @@ class LoadingShimmer extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  /// The placeholder content to animate with shimmer.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final baseColor = isDark
+        ? AppColors.surfaceDark
+        : Colors.grey[300]!;
+
+    final highlightColor = isDark
+        ? AppColors.dividerDark
+        : Colors.grey[100]!;
+
+    return Shimmer.fromColors(
+      baseColor: baseColor,
+      highlightColor: highlightColor,
+      child: child,
     );
   }
 }

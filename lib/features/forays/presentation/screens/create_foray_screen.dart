@@ -182,15 +182,15 @@ class _CreateForayScreenState extends ConsumerState<CreateForayScreen> {
         name: _nameController.text.trim(),
         description: Value(_descriptionController.text.trim().isEmpty
             ? null
-            : _descriptionController.text.trim()),
+            : _descriptionController.text.trim(),),
         date: _date,
         locationName: Value(_locationController.text.trim().isEmpty
             ? null
-            : _locationController.text.trim()),
+            : _locationController.text.trim(),),
         defaultPrivacy: Value(_defaultPrivacy),
         joinCode: Value(joinCode),
         isSolo: const Value(false),
-      ));
+      ),);
 
       await db.foraysDao.addParticipant(
         forayId: forayId,

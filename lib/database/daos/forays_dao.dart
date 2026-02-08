@@ -201,7 +201,7 @@ class ForaysDao extends DatabaseAccessor<AppDatabase> with _$ForaysDaoMixin {
 
   /// Update sync status for a foray.
   Future<void> updateSyncStatus(String id, SyncStatus status,
-      {String? remoteId}) {
+      {String? remoteId,}) {
     return (update(forays)..where((f) => f.id.equals(id))).write(
       ForaysCompanion(
         syncStatus: Value(status),
@@ -218,20 +218,20 @@ class ForaysDao extends DatabaseAccessor<AppDatabase> with _$ForaysDaoMixin {
 
 /// A foray with the current user's role.
 class ForayWithRole {
-  final Foray foray;
-  final ParticipantRole role;
 
   ForayWithRole({required this.foray, required this.role});
+  final Foray foray;
+  final ParticipantRole role;
 
   bool get isOrganizer => role == ParticipantRole.organizer;
 }
 
 /// A participant with their user details.
 class ParticipantWithUser {
-  final ForayParticipant participant;
-  final User user;
 
   ParticipantWithUser({required this.participant, required this.user});
+  final ForayParticipant participant;
+  final User user;
 
   bool get isOrganizer => participant.role == ParticipantRole.organizer;
 }

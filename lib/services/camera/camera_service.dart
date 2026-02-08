@@ -117,7 +117,9 @@ class CameraService {
     try {
       final dir = await getApplicationDocumentsDirectory();
       final photosDir = Directory(p.join(dir.path, 'photos'));
+      // ignore: avoid_slow_async_io
       if (!await photosDir.exists()) {
+        // ignore: avoid_slow_async_io
         await photosDir.create(recursive: true);
       }
 
@@ -137,7 +139,9 @@ class CameraService {
   Future<bool> deletePhoto(String path) async {
     try {
       final file = File(path);
+      // ignore: avoid_slow_async_io
       if (await file.exists()) {
+        // ignore: avoid_slow_async_io
         await file.delete();
         return true;
       }

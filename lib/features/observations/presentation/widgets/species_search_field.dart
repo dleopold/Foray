@@ -218,7 +218,7 @@ class _SpeciesSearchFieldState extends State<SpeciesSearchField> {
     return allSpecies
         .where((s) =>
             s.scientificName.toLowerCase().contains(lowerQuery) ||
-            (s.commonName?.toLowerCase().contains(lowerQuery) ?? false))
+            (s.commonName?.toLowerCase().contains(lowerQuery) ?? false),)
         .take(8)
         .toList();
   }
@@ -226,8 +226,8 @@ class _SpeciesSearchFieldState extends State<SpeciesSearchField> {
 
 /// A species search result.
 class SpeciesResult {
-  final String scientificName;
-  final String? commonName;
 
   SpeciesResult(this.scientificName, [this.commonName]);
+  final String scientificName;
+  final String? commonName;
 }

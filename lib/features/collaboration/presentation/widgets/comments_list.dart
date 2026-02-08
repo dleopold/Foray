@@ -144,7 +144,7 @@ class _CommentsListState extends ConsumerState<CommentsList> {
         observationId: widget.observationId,
         authorId: user.id,
         content: content,
-      ));
+      ),);
 
       // Queue for sync
       await db.syncDao.enqueue(

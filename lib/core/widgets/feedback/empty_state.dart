@@ -36,27 +36,6 @@ class EmptyState extends StatelessWidget {
           'Cannot provide both icon and iconWidget',
         );
 
-  /// Icon to display. Mutually exclusive with [iconWidget].
-  final IconData? icon;
-
-  /// Custom widget to display instead of icon.
-  final Widget? iconWidget;
-
-  /// Primary message title.
-  final String title;
-
-  /// Optional secondary description text.
-  final String? description;
-
-  /// Label for the optional action button.
-  final String? actionLabel;
-
-  /// Callback for the action button.
-  final VoidCallback? onAction;
-
-  /// Whether to use a compact layout.
-  final bool compact;
-
   /// Creates an empty state for when there are no observations.
   factory EmptyState.noObservations({
     VoidCallback? onAction,
@@ -180,6 +159,27 @@ class EmptyState extends StatelessWidget {
       compact: true,
     );
   }
+
+  /// Icon to display. Mutually exclusive with [iconWidget].
+  final IconData? icon;
+
+  /// Custom widget to display instead of icon.
+  final Widget? iconWidget;
+
+  /// Primary message title.
+  final String title;
+
+  /// Optional secondary description text.
+  final String? description;
+
+  /// Label for the optional action button.
+  final String? actionLabel;
+
+  /// Callback for the action button.
+  final VoidCallback? onAction;
+
+  /// Whether to use a compact layout.
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {

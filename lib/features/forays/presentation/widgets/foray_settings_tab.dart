@@ -156,7 +156,7 @@ class ForaySettingsTab extends ConsumerWidget {
   }
 
   Future<void> _setObservationsLocked(
-      BuildContext context, WidgetRef ref, bool locked) async {
+      BuildContext context, WidgetRef ref, bool locked,) async {
     final db = ref.read(databaseProvider);
     await db.foraysDao.setObservationsLocked(forayId, locked);
   }

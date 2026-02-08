@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +66,7 @@ class PhotoUploadService {
       bytes: bytes,
       maxDimension: AppConstants.photoMaxDimension,
       quality: AppConstants.photoCompressionQuality,
-    ));
+    ),);
   }
 
   Future<void> deletePhoto(String storagePath) async {

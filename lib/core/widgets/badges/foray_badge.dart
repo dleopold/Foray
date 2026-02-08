@@ -66,27 +66,6 @@ class ForayBadge extends StatelessWidget {
     this.outlined = false,
   });
 
-  /// The text label of the badge.
-  final String label;
-
-  /// Color variant of the badge.
-  final ForayBadgeVariant variant;
-
-  /// Size of the badge.
-  final ForayBadgeSize size;
-
-  /// Optional leading icon.
-  final IconData? icon;
-
-  /// Called when the dismiss button is tapped. Shows dismiss button if not null.
-  final VoidCallback? onDismiss;
-
-  /// Called when the badge is tapped.
-  final VoidCallback? onTap;
-
-  /// Whether to use an outlined style instead of filled.
-  final bool outlined;
-
   /// Creates a count badge (e.g., notification count).
   factory ForayBadge.count({
     Key? key,
@@ -119,6 +98,27 @@ class ForayBadge extends StatelessWidget {
     );
   }
 
+  /// The text label of the badge.
+  final String label;
+
+  /// Color variant of the badge.
+  final ForayBadgeVariant variant;
+
+  /// Size of the badge.
+  final ForayBadgeSize size;
+
+  /// Optional leading icon.
+  final IconData? icon;
+
+  /// Called when the dismiss button is tapped. Shows dismiss button if not null.
+  final VoidCallback? onDismiss;
+
+  /// Called when the badge is tapped.
+  final VoidCallback? onTap;
+
+  /// Whether to use an outlined style instead of filled.
+  final bool outlined;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -133,7 +133,7 @@ class ForayBadge extends StatelessWidget {
     final fontSize = _getFontSize();
     final iconSize = _getIconSize();
 
-    Widget content = Row(
+    final Widget content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
@@ -188,32 +188,32 @@ class ForayBadge extends StatelessWidget {
   _BadgeColors _getColors(bool isDark) {
     switch (variant) {
       case ForayBadgeVariant.primary:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.primary,
           foreground: Colors.white,
         );
       case ForayBadgeVariant.secondary:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.secondary,
           foreground: Colors.white,
         );
       case ForayBadgeVariant.success:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.success,
           foreground: Colors.white,
         );
       case ForayBadgeVariant.warning:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.warning,
           foreground: AppColors.textPrimaryLight,
         );
       case ForayBadgeVariant.error:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.error,
           foreground: Colors.white,
         );
       case ForayBadgeVariant.info:
-        return _BadgeColors(
+        return const _BadgeColors(
           background: AppColors.info,
           foreground: Colors.white,
         );

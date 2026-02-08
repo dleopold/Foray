@@ -163,10 +163,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         if (authState.isAuthenticated) ...[
-          ListTile(
-            leading: const Icon(Icons.sync),
-            title: const Text('Sync Status'),
-            subtitle: const Text('All data synced'),
+          const ListTile(
+            leading: Icon(Icons.sync),
+            title: Text('Sync Status'),
+            subtitle: Text('All data synced'),
             trailing: Icon(
               Icons.cloud_done,
               color: AppColors.success,
@@ -416,10 +416,10 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.info_outline),
-          title: const Text('Version'),
-          subtitle: const Text('1.0.0'),
+        const ListTile(
+          leading: Icon(Icons.info_outline),
+          title: Text('Version'),
+          subtitle: Text('1.0.0'),
         ),
         ListTile(
           leading: const Icon(Icons.description_outlined),

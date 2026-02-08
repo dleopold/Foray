@@ -13,9 +13,9 @@ import 'tables/photos_table.dart';
 /// - 5 observations with photos
 /// - Sample identifications, votes, and comments
 class MockDataSeeder {
-  final AppDatabase db;
 
   MockDataSeeder(this.db);
+  final AppDatabase db;
 
   /// Check if mock data already exists.
   Future<bool> hasData() async {

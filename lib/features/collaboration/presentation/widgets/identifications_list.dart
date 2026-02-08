@@ -134,7 +134,7 @@ class IdentificationsList extends ConsumerWidget {
   }
 
   Future<void> _delete(
-      BuildContext context, WidgetRef ref, String identificationId) async {
+      BuildContext context, WidgetRef ref, String identificationId,) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(

@@ -69,7 +69,7 @@ class ForayListScreen extends ConsumerWidget {
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding),
+                        horizontal: AppSpacing.screenPadding,),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) => Padding(
@@ -78,7 +78,7 @@ class ForayListScreen extends ConsumerWidget {
                             forayWithRole: activeForays[index],
                             onTap: () => context.push(
                               AppRoutes.forayDetail.replaceFirst(
-                                  ':id', activeForays[index].foray.id),
+                                  ':id', activeForays[index].foray.id,),
                             ),
                           ),
                         ),
@@ -101,7 +101,7 @@ class ForayListScreen extends ConsumerWidget {
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding),
+                        horizontal: AppSpacing.screenPadding,),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) => Padding(
@@ -110,7 +110,7 @@ class ForayListScreen extends ConsumerWidget {
                             forayWithRole: completedForays[index],
                             onTap: () => context.push(
                               AppRoutes.forayDetail.replaceFirst(
-                                  ':id', completedForays[index].foray.id),
+                                  ':id', completedForays[index].foray.id,),
                             ),
                           ),
                         ),
@@ -238,7 +238,7 @@ class ForayListScreen extends ConsumerWidget {
       date: DateTime.now(),
       defaultPrivacy: const Value(PrivacyLevel.private),
       isSolo: const Value(true),
-    ));
+    ),);
 
     await db.foraysDao.addParticipant(
       forayId: forayId,

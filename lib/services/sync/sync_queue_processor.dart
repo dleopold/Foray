@@ -144,7 +144,7 @@ class SyncQueueProcessor {
       pendingCount: pendingCount,
       failedCount: failedCount,
       lastSync: DateTime.now(),
-    ));
+    ),);
   }
 
   void dispose() {

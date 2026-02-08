@@ -47,7 +47,7 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
     return (select(syncQueue)
           ..where((q) =>
               q.status.equals('failed') &
-              q.retryCount.isSmallerThanValue(maxRetries))
+              q.retryCount.isSmallerThanValue(maxRetries),)
           ..orderBy([(q) => OrderingTerm.asc(q.lastAttempt)]))
         .get();
   }
@@ -107,7 +107,7 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
     final cutoff = DateTime.now().subtract(age);
     return (delete(syncQueue)
           ..where((q) =>
-              q.status.equals('completed') & q.createdAt.isSmallerThanValue(cutoff)))
+              q.status.equals('completed') & q.createdAt.isSmallerThanValue(cutoff),))
         .go();
   }
 
@@ -173,7 +173,7 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
           ..where((q) =>
               q.entityType.equals(entityType) &
               q.entityId.equals(entityId) &
-              q.status.isIn(['pending', 'processing'])))
+              q.status.isIn(['pending', 'processing']),))
         .getSingleOrNull();
     return result != null;
   }
@@ -185,10 +185,6 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
 
 /// Statistics about the sync queue.
 class SyncQueueStats {
-  final int pending;
-  final int processing;
-  final int failed;
-  final int completed;
 
   SyncQueueStats({
     required this.pending,
@@ -196,6 +192,10 @@ class SyncQueueStats {
     required this.failed,
     required this.completed,
   });
+  final int pending;
+  final int processing;
+  final int failed;
+  final int completed;
 
   int get total => pending + processing + failed + completed;
   bool get hasWork => pending > 0 || processing > 0;

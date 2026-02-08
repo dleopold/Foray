@@ -22,7 +22,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Add a new identification to an observation.
   Future<Identification> addIdentification(
-      IdentificationsCompanion id) async {
+      IdentificationsCompanion id,) async {
     await into(identifications).insert(id);
     return (select(identifications)..where((i) => i.id.equals(id.id.value)))
         .getSingle();
@@ -30,7 +30,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Get all identifications for an observation with identifier details.
   Future<List<IdentificationWithDetails>> getIdentificationsForObservation(
-      String observationId) async {
+      String observationId,) async {
     final query = select(identifications).join([
       leftOuterJoin(users, users.id.equalsExp(identifications.identifierId)),
     ])
@@ -48,7 +48,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Watch identifications for real-time updates.
   Stream<List<IdentificationWithDetails>> watchIdentificationsForObservation(
-      String observationId) {
+      String observationId,) {
     final query = select(identifications).join([
       leftOuterJoin(users, users.id.equalsExp(identifications.identifierId)),
     ])
@@ -109,7 +109,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
     for (final id in allIds) {
       await (delete(identificationVotes)
             ..where((v) =>
-                v.identificationId.equals(id.id) & v.userId.equals(userId)))
+                v.identificationId.equals(id.id) & v.userId.equals(userId),))
           .go();
       await _updateVoteCount(id.id);
     }
@@ -129,14 +129,14 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
     await (delete(identificationVotes)
           ..where((v) =>
               v.identificationId.equals(identificationId) &
-              v.userId.equals(userId)))
+              v.userId.equals(userId),))
         .go();
     await _updateVoteCount(identificationId);
   }
 
   /// Get which identification a user has voted for in an observation.
   Future<String?> getUserVoteForObservation(
-      String observationId, String userId) async {
+      String observationId, String userId,) async {
     final allIds = await (select(identifications)
           ..where((i) => i.observationId.equals(observationId)))
         .get();
@@ -144,7 +144,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
     for (final id in allIds) {
       final vote = await (select(identificationVotes)
             ..where((v) =>
-                v.identificationId.equals(id.id) & v.userId.equals(userId)))
+                v.identificationId.equals(id.id) & v.userId.equals(userId),))
           .getSingleOrNull();
       if (vote != null) {
         return id.id;
@@ -155,7 +155,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Get all voters for an identification.
   Future<List<User>> getVotersForIdentification(
-      String identificationId) async {
+      String identificationId,) async {
     final query = select(identificationVotes).join([
       innerJoin(users, users.id.equalsExp(identificationVotes.userId)),
     ])
@@ -190,7 +190,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Get all comments for an observation with author details.
   Future<List<CommentWithAuthor>> getCommentsForObservation(
-      String observationId) async {
+      String observationId,) async {
     final query = select(comments).join([
       leftOuterJoin(users, users.id.equalsExp(comments.authorId)),
     ])
@@ -208,7 +208,7 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
   /// Watch comments for real-time updates.
   Stream<List<CommentWithAuthor>> watchCommentsForObservation(
-      String observationId) {
+      String observationId,) {
     final query = select(comments).join([
       leftOuterJoin(users, users.id.equalsExp(comments.authorId)),
     ])
@@ -259,22 +259,22 @@ class CollaborationDao extends DatabaseAccessor<AppDatabase>
 
 /// An identification with identifier details.
 class IdentificationWithDetails {
-  final Identification identification;
-  final User? identifier;
 
   IdentificationWithDetails({
     required this.identification,
     this.identifier,
   });
+  final Identification identification;
+  final User? identifier;
 }
 
 /// A comment with author details.
 class CommentWithAuthor {
-  final Comment comment;
-  final User? author;
 
   CommentWithAuthor({
     required this.comment,
     this.author,
   });
+  final Comment comment;
+  final User? author;
 }

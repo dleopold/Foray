@@ -129,7 +129,7 @@ class MapCluster {
     return LatLngBounds.fromPoints(
       observations
           .map((o) =>
-              LatLng(o.observation.latitude, o.observation.longitude))
+              LatLng(o.observation.latitude, o.observation.longitude),)
           .toList(),
     );
   }

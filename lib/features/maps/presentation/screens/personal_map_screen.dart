@@ -390,7 +390,7 @@ class _FilterSheetState extends State<_FilterSheet> {
             title: const Text('Date Range'),
             subtitle: Text(_dateFilter == null
                 ? 'All time'
-                : '${Formatters.date(_dateFilter!.start)} - ${Formatters.date(_dateFilter!.end)}'),
+                : '${Formatters.date(_dateFilter!.start)} - ${Formatters.date(_dateFilter!.end)}',),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

@@ -19,7 +19,9 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 
 /// Exception thrown when sync operations fail due to Supabase being unavailable.
 class SyncUnavailableException implements Exception {
-  const SyncUnavailableException([this.message = 'Sync unavailable: Supabase not configured']);
+  const SyncUnavailableException([
+    this.message = 'Sync unavailable: Supabase not configured',
+  ]);
   final String message;
   @override
   String toString() => message;
@@ -31,7 +33,7 @@ class SyncService {
   final SupabaseClient? _supabase;
   final AppDatabase _db;
   final PhotoUploadService _photoUploader;
-  
+
   /// Whether sync is available (Supabase configured).
   bool get isAvailable => _supabase != null;
 
@@ -39,16 +41,20 @@ class SyncService {
     if (_supabase == null) {
       throw const SyncUnavailableException();
     }
-    
-    final observation = await _db.observationsDao.getObservationById(observationId);
+
+    final observation =
+        await _db.observationsDao.getObservationById(observationId);
     if (observation == null) return;
 
-    final photos = await _db.observationsDao.getPhotosForObservation(observationId);
+    final photos =
+        await _db.observationsDao.getPhotosForObservation(observationId);
 
     for (final photo in photos) {
-      if (photo.uploadStatus != UploadStatus.uploaded && photo.remoteUrl == null) {
+      if (photo.uploadStatus != UploadStatus.uploaded &&
+          photo.remoteUrl == null) {
         try {
           final file = File(photo.localPath);
+          // ignore: avoid_slow_async_io
           if (await file.exists()) {
             final url = await _photoUploader.uploadPhoto(
               file: file,
@@ -71,7 +77,7 @@ class SyncService {
     }
 
     final observationData = _observationToMap(observation);
-    
+
     final response = await _supabase
         .from('observations')
         .upsert(observationData)
@@ -79,14 +85,15 @@ class SyncService {
         .single();
 
     final remoteId = response['id'] as String;
-    
+
     await _db.observationsDao.updateSyncStatus(
       observationId,
       SyncStatus.synced,
       remoteId: remoteId,
     );
 
-    final updatedPhotos = await _db.observationsDao.getPhotosForObservation(observationId);
+    final updatedPhotos =
+        await _db.observationsDao.getPhotosForObservation(observationId);
     for (final photo in updatedPhotos) {
       if (photo.remoteUrl != null) {
         await _supabase.from('photos').upsert({
@@ -105,7 +112,7 @@ class SyncService {
     if (_supabase == null) {
       throw const SyncUnavailableException();
     }
-    
+
     final foray = await _db.foraysDao.getForayById(forayId);
     if (foray == null) return;
 
@@ -123,14 +130,11 @@ class SyncService {
       'observations_locked': foray.observationsLocked,
     };
 
-    final response = await _supabase
-        .from('forays')
-        .upsert(forayData)
-        .select()
-        .single();
+    final response =
+        await _supabase.from('forays').upsert(forayData).select().single();
 
     final remoteId = response['id'] as String;
-    
+
     await _db.foraysDao.updateSyncStatus(
       forayId,
       SyncStatus.synced,
@@ -142,8 +146,9 @@ class SyncService {
     if (_supabase == null) {
       throw const SyncUnavailableException();
     }
-    
-    final id = await _db.collaborationDao.getIdentificationById(identificationId);
+
+    final id =
+        await _db.collaborationDao.getIdentificationById(identificationId);
     if (id == null) return;
 
     final idData = {
@@ -158,7 +163,7 @@ class SyncService {
     };
 
     await _supabase.from('identifications').upsert(idData);
-    
+
     await _db.collaborationDao.updateIdentificationSyncStatus(
       identificationId,
       SyncStatus.synced,
@@ -169,7 +174,7 @@ class SyncService {
     if (_supabase == null) {
       throw const SyncUnavailableException();
     }
-    
+
     final comment = await _db.collaborationDao.getCommentById(commentId);
     if (comment == null) return;
 
@@ -181,7 +186,7 @@ class SyncService {
     };
 
     await _supabase.from('comments').upsert(commentData);
-    
+
     await _db.collaborationDao.updateCommentSyncStatus(
       commentId,
       SyncStatus.synced,
@@ -192,7 +197,7 @@ class SyncService {
     if (_supabase == null) {
       throw const SyncUnavailableException();
     }
-    
+
     final foray = await _db.foraysDao.getForayById(forayId);
     if (foray?.remoteId == null) return;
 
@@ -208,8 +213,9 @@ class SyncService {
 
   Future<void> _mergeObservation(Map<String, dynamic> remote) async {
     final remoteId = remote['id'] as String;
-    final existing = await _db.observationsDao.getObservationByRemoteId(remoteId);
-    
+    final existing =
+        await _db.observationsDao.getObservationByRemoteId(remoteId);
+
     if (existing == null) {
       await _createLocalObservation(remote);
     } else {
@@ -251,9 +257,12 @@ class SyncService {
     }
   }
 
-  Future<void> _updateLocalObservation(Observation existing, Map<String, dynamic> remote) async {
+  Future<void> _updateLocalObservation(
+    Observation existing,
+    Map<String, dynamic> remote,
+  ) async {
     final remoteUpdated = DateTime.parse(remote['updated_at']);
-    
+
     if (remoteUpdated.isAfter(existing.updatedAt)) {
       await _db.observationsDao.updateFromRemote(
         localId: existing.id,

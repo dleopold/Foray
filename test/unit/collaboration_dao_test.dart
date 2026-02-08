@@ -3,9 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:foray/database/database.dart';
 import 'package:foray/database/daos/collaboration_dao.dart';
-import 'package:foray/database/tables/comments_table.dart';
 import 'package:foray/database/tables/forays_table.dart';
-import 'package:foray/database/tables/identifications_table.dart';
 import 'package:foray/database/tables/observations_table.dart';
 
 void main() {
