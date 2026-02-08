@@ -35,8 +35,7 @@ abstract class AppTheme {
           elevation: 0,
           centerTitle: true,
         ),
-        // ignore: deprecated_member_use
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: AppColors.surfaceLight,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -83,8 +82,7 @@ abstract class AppTheme {
           elevation: 0,
           centerTitle: true,
         ),
-        // ignore: deprecated_member_use
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: AppColors.surfaceDark,
           elevation: 0,
           shape: RoundedRectangleBorder(
