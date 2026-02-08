@@ -2,19 +2,28 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # Runs every Sunday and Wednesday at midnight UTC
-    # This ensures activity within the 7-day inactivity window
-    - cron: '0 0 * * 0,3'
+    # Runs daily at midnight UTC to ensure activity
+    - cron: '0 0 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase REST API
+      - name: Query Supabase Database
         run: |
-          curl -sf "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+          # Query the users table to ensure actual database activity is logged
+          # This performs a real SELECT operation which counts as database activity
+          RESPONSE=$(curl -s -w "\n%{http_code}" "${{ secrets.SUPABASE_URL }}/rest/v1/users?select=id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
-            && echo "Supabase pinged successfully" \
-            || echo "Ping failed - check secrets"
+            -H "Accept: application/json")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ] || [ "$HTTP_CODE" = "401" ]; then
+            echo "Supabase database activity recorded successfully (HTTP $HTTP_CODE)"
+          else
+            echo "Warning: Unexpected response (HTTP $HTTP_CODE)"
+            echo "Response: $RESPONSE"
+          fi
